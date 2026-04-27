@@ -1,6 +1,6 @@
-# UML — Diagrama de Atividade
+# UML | Diagrama de Atividade
 
-> Mostra o **fluxo de execução** completo — do HTTP Request até a persistência assíncrona via RabbitMQ.
+> Mostra o **fluxo de execução** completo do HTTP Request até a persistência assíncrona via RabbitMQ.
 
 ---
 
@@ -88,7 +88,7 @@ flowchart TD
 
 ---
 
-## Estados do pipeline — Lançamento
+## Estados do pipeline | Lançamento
 
 | Etapa | Componente | O que faz | O que falha |
 |---|---|---|---|
@@ -99,7 +99,7 @@ flowchart TD
 | 5 | FluxoDeCaixaMainConsumer | Consome fila; INSERT + UPSERT | Nack+requeue até MaxRetries → DLQ |
 | 6 | FluxoDeCaixaDlqConsumer | Segunda tentativa; sem requeue | Log Error; Ack (descarta) — evita loop |
 
-## Estados do pipeline — Relatório
+## Estados do pipeline | Relatório
 
 | Etapa | Componente | O que faz | O que falha |
 |---|---|---|---|
