@@ -1,4 +1,4 @@
-# Requisitos — Funcionais e Não-Funcionais (refinados)
+# Requisitos | Funcionais e Não-Funcionais (refinados)
 
 > A partir do enunciado do desafio, refinamos os requisitos abaixo com critérios de aceitação testáveis.
 
@@ -6,7 +6,7 @@
 
 ## 1. Requisitos Funcionais
 
-### RF-01 — Registrar lançamento de **crédito**
+### RF-01 | Registrar lançamento de **crédito**
 **Descrição**: O sistema deve permitir registrar uma entrada de caixa associada a uma data e descrição.
 **Endpoint**: `POST /api/FluxoDeCaixa/InsertCredito`
 **Entrada**:
@@ -19,24 +19,24 @@
 - [x] Em caso de validação inválida → `400 + { errors: [...] }`.
 - [x] Em caso de falha de BD → `200 + { succcess: false, message: <erro> }` *(comportamento atual; roadmap: 5xx)*.
 
-### RF-02 — Registrar lançamento de **débito**
+### RF-02 | Registrar lançamento de **débito**
 Análogo a RF-01, endpoint `POST /api/FluxoDeCaixa/InsertDebito`.
 
-### RF-03 — Consultar **consolidado diário** por intervalo
+### RF-03 | Consultar **consolidado diário** por intervalo
 **Endpoint**: `GET /api/FluxoDeCaixaRelatorio/Relatorio?inicio=yyyy-MM-dd&fim=yyyy-MM-dd`
 **Critérios de aceitação**:
 - [x] Retorna lista `[{ dataFC, credito, debito, criadoEm }]` agregada por dia.
 - [x] `400` se `inicio` vazio ou `fim ≤ inicio`.
 - [x] Suporta intervalo de até 10 anos sem degradação perceptível (<200 ms p95).
 
-### RF-04 *(roadmap)* — Atualizar lançamento
+### RF-04 *(roadmap)* | Atualizar lançamento
 - Comando `UpdateFluxoDeCaixaCommand` já existe (esqueleto). Falta implementar handler completo + endpoint.
 
-### RF-05 *(roadmap)* — Excluir lançamento (soft-delete)
+### RF-05 *(roadmap)* | Excluir lançamento (soft-delete)
 
-### RF-06 *(roadmap)* — Auditoria / histórico de alterações
+### RF-06 *(roadmap)* | Auditoria / histórico de alterações
 
-### RF-07 *(roadmap)* — Exportar relatório (CSV / Excel / API → ERP)
+### RF-07 *(roadmap)* | Exportar relatório (CSV / Excel / API → ERP)
 
 ### Regras de negócio (extraídas dos Validators)
 
@@ -52,14 +52,14 @@ Análogo a RF-01, endpoint `POST /api/FluxoDeCaixa/InsertDebito`.
 
 ## 2. Requisitos Não-Funcionais
 
-### RNF-01 — **Disponibilidade Independente** *(crítico, do enunciado)*
+### RNF-01 | **Disponibilidade Independente** *(crítico, do enunciado)*
 > Lançamentos não pode ficar indisponível se Relatório cair.
 
 | Métrica | Meta | Estratégia |
 |---|---|---|
 | MTTR Lançamentos quando Relatório falha | 0 (não há propagação) | Microsserviços separados, sem chamada síncrona Lanc→Rel |
 
-### RNF-02 — **Throughput / Carga** *(crítico, do enunciado)*
+### RNF-02 | **Throughput / Carga** *(crítico, do enunciado)*
 > Relatório suporta **50 req/s** com no máximo **5% de perda**.
 
 | Métrica | Meta | Estratégia |
@@ -67,7 +67,7 @@ Análogo a RF-01, endpoint `POST /api/FluxoDeCaixa/InsertDebito`.
 | Throughput sustentado | ≥ 50 rps | Stateless + autoscale 3→15 réplicas; cache Redis (roadmap); read model pré-agregada |
 | Taxa de erro sob pico | < 5% | Circuit breaker no Gateway (roadmap); rate limit configurável |
 
-### RNF-03 — **Latência**
+### RNF-03 | **Latência**
 | Métrica | Meta |
 |---|---|
 | p50 Lançamento | < 50 ms |
@@ -75,14 +75,14 @@ Análogo a RF-01, endpoint `POST /api/FluxoDeCaixa/InsertDebito`.
 | p95 Relatório (com cache) | < 100 ms |
 | p95 Relatório (sem cache) | < 250 ms |
 
-### RNF-04 — **Disponibilidade global**
+### RNF-04 | **Disponibilidade global**
 | SLO | Meta |
 |---|---|
 | Lançamentos | 99,9% / mês (≈ 43 min downtime/mês) |
 | Relatório | 99,5% / mês |
 | Gateway | 99,95% (replicado, com Front Door) |
 
-### RNF-05 — **Segurança**
+### RNF-05 | **Segurança**
 | Item | Meta | Status |
 |---|---|---|
 | Validação de input | 100% endpoints | ✅ FluentValidation |
@@ -94,12 +94,12 @@ Análogo a RF-01, endpoint `POST /api/FluxoDeCaixa/InsertDebito`.
 | Headers de segurança | `Strict-Transport-Security`, `X-Content-Type-Options`, etc. | ⚠️ Adicionar middleware no Gateway |
 | Rate limit | 1000 rps / IP | ⚠️ Roadmap |
 
-### RNF-06 — **Escalabilidade**
+### RNF-06 | **Escalabilidade**
 - **Horizontal**: serviços stateless, podem rodar N réplicas atrás do Gateway.
 - **Vertical**: SQL Server pode escalar de S0 → S2 → S4 → P1+ conforme carga.
 - **Autoscaling**: KEDA HTTP scaler (K8s) ou ACA HTTP rule (Azure) — gatilho 30 rps por instância.
 
-### RNF-07 — **Observabilidade**
+### RNF-07 | **Observabilidade**
 | Pilar | Ferramenta | Status |
 |---|---|---|
 | Logs estruturados | `LoggingBehaviour` + ILogger | ✅ |
@@ -108,18 +108,18 @@ Análogo a RF-01, endpoint `POST /api/FluxoDeCaixa/InsertDebito`.
 | Traces distribuídos | OpenTelemetry → Jaeger / Tempo | ⚠️ Roadmap |
 | Alertas | Alertas em SLOs (p95, error rate) | ⚠️ Roadmap |
 
-### RNF-08 — **Manutenibilidade**
+### RNF-08 | **Manutenibilidade**
 - Clean Architecture estrita (regras documentadas em `docs/arquitetura/uml/componentes.md`).
 - Validações centralizadas em `*Validator.cs`.
 - Cross-cutting em `Behaviours/`.
 - Cobertura de testes (roadmap): mínimo 70% nas camadas Application e Persistence.
 
-### RNF-09 — **Portabilidade / Deploy**
+### RNF-09 | **Portabilidade / Deploy**
 - Imagens Docker prontas (`docker/Dockerfile.*`).
 - `docker-compose.yml` para subir tudo localmente.
 - Compatível com Azure Container Apps, AWS ECS, Kubernetes.
 
-### RNF-10 — **Conformidade**
+### RNF-10 | **Conformidade**
 - LGPD: campos `descricao` podem conter dados pessoais → criptografia em coluna *(roadmap)* e logs sem PII (revisar `LoggingBehaviour` para mascarar `descricao` em produção).
 
 ---
