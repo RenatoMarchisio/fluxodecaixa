@@ -1,4 +1,4 @@
-# ADR-001 — Adotar arquitetura de Microsserviços com API Gateway
+# ADR-001 | Adotar arquitetura de Microsserviços com API Gateway
 
 - **Status:** Aceita
 - **Data:** 2026-04-26
@@ -19,12 +19,12 @@ Isso impõe **isolamento de falhas** e **escalabilidade independente** entre o c
 - ✅ Simplicidade operacional (1 deploy, 1 banco, 1 pipeline).
 - ✅ Menor latência interna (chamadas in-process).
 - ❌ **Falha catastrófica compartilhada**: um pico de leitura derruba o processo inteiro → viola RNF-01.
-- ❌ Escala vertical apenas — multiplicar instâncias custa mais (replica todo o código, mesmo o que não tem carga).
-- ❌ Liberações acopladas — qualquer mudança no Relatório requer redeploy de Lançamentos.
+- ❌ Escala vertical apenas, multiplicar instâncias custa mais (replica todo o código, mesmo o que não tem carga).
+- ❌ Liberações acopladas, qualquer mudança no Relatório requer redeploy de Lançamentos.
 
 ### Opção B — Microsserviços (escolhida)
 - ✅ **Atende RNF-01 por design**: processos separados, falhas não se propagam.
-- ✅ Escala independente — Relatório pode ter 10 réplicas enquanto Lançamentos tem 2.
+- ✅ Escala independente Relatório pode ter 10 réplicas enquanto Lançamentos tem 2.
 - ✅ Times podem evoluir os bounded contexts independentemente.
 - ✅ Permite **CQRS físico** futuro (banco de leitura separado para o Relatório).
 - ❌ Maior complexidade operacional (3 processos, gateway, observabilidade distribuída).
@@ -48,7 +48,7 @@ Isso impõe **isolamento de falhas** e **escalabilidade independente** entre o c
    - `FluxoDeCaixa` é escrita por Lançamentos.
    - `FluxoDeCaixaConsolidado` é lida por Relatório (read model pré-agregada).
    - Path evolutivo claro para **database-per-service**.
-4. **Gateway é o único ponto público** — microsserviços têm ingress *internal-only* em produção.
+4. **Gateway é o único ponto público** microsserviços têm ingress *internal-only* em produção.
 
 ## Consequências
 
