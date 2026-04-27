@@ -1,4 +1,4 @@
-# ADR-002 — Adotar CQRS leve com MediatR
+# ADR-002 | Adotar CQRS leve com MediatR
 
 - **Status:** Aceita
 - **Data:** 2026-04-26
