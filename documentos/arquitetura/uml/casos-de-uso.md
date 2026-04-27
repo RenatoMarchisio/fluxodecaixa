@@ -1,6 +1,6 @@
-# UML — Diagrama de Casos de Uso
+# UML | Diagrama de Casos de Uso
 
-> Visão funcional **orientada ao usuário** — quem pode fazer o quê.
+> Visão funcional **orientada ao usuário** quem pode fazer o quê.
 
 ```mermaid
 flowchart LR
@@ -38,7 +38,7 @@ flowchart LR
 
 ---
 
-## Cenários (UC-01 — caminho feliz)
+## Cenários (UC-01 | caminho feliz)
 
 1. O Ator envia `POST /api/FluxoDeCaixa/InsertCredito` com `{dataFC, descricao, credito}`.
 2. O Gateway autentica *(roadmap)* e roteia para o serviço de Lançamentos.
@@ -53,7 +53,7 @@ flowchart LR
 - **A3** — Descrição vazia → `HTTP 400`
 - **A4** — Falha de banco (SqlException) → `HTTP 200` com `{ succcess: false, message: "<ex.Message>" }` *(comportamento atual; recomendado evoluir para 5xx no roadmap)*
 
-## Cenários (UC-02 — caminho feliz)
+## Cenários (UC-02 | caminho feliz)
 
 1. O Ator envia `POST /api/FluxoDeCaixa/InsertDebito` com `{dataFC, descricao, debito}`.
 2. O Gateway autentica *(roadmap)* e roteia para o serviço de Lançamentos.
