@@ -4,7 +4,7 @@
 
 ---
 
-## 1. Horizonte 0 (próximos 30 dias) — Hardening de produção
+## 1. Horizonte 0 (próximos 30 dias) Hardening de produção
 
 | # | Item | Esforço | Valor |
 |---|---|---|---|
@@ -19,7 +19,7 @@
 
 ---
 
-## 2. Horizonte 1 (próximos 90 dias) — Performance & Observabilidade
+## 2. Horizonte 1 (próximos 90 dias) Performance & Observabilidade
 
 | # | Item | Esforço | Valor |
 |---|---|---|---|
@@ -33,7 +33,7 @@
 
 ---
 
-## 3. Horizonte 2 (próximos 6 meses) — Escala & Funcionalidades
+## 3. Horizonte 2 (próximos 6 meses) Escala & Funcionalidades
 
 | # | Item | Esforço | Valor |
 |---|---|---|---|
@@ -48,7 +48,7 @@
 
 ---
 
-## 4. Horizonte 3 (>6 meses) — Visão estratégica
+## 4. Horizonte 3 (>6 meses) Visão estratégica
 
 | # | Item | Por quê |
 |---|---|---|
