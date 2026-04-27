@@ -1,4 +1,4 @@
-# C4 — Nível 1: Contexto do Sistema
+# C4 | Nível 1: Contexto do Sistema
 
 > **Modelo C4**. Este nível mostra **o sistema visto de fora**: quem usa, com quem se integra, qual é o seu propósito de negócio.
 
@@ -62,10 +62,10 @@ flowchart LR
 
 ## 5. Drivers Arquiteturais
 
-1. **Disponibilidade independente** — queda do Consolidado/Relatório não pode afetar Lançamentos.
-2. **Resiliência sob carga** — Consolidado absorve **50 req/s** com < 5% de perda (Redis resolve).
-3. **Resiliência de escrita** — lançamentos nunca se perdem mesmo com queda do SQL (RabbitMQ + DLQ).
-4. **Manutenibilidade** — código em camadas (Clean Architecture), padrões CQRS/MediatR, testes automatizados.
+1. **Disponibilidade independente** queda do Consolidado/Relatório não pode afetar Lançamentos.
+2. **Resiliência sob carga** Consolidado absorve **50 req/s** com < 5% de perda (Redis resolve).
+3. **Resiliência de escrita** lançamentos nunca se perdem mesmo com queda do SQL (RabbitMQ + DLQ).
+4. **Manutenibilidade** código em camadas (Clean Architecture), padrões CQRS/MediatR, testes automatizados.
 
 ## 6. Pessoas-chave de governança
 
