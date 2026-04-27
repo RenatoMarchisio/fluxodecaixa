@@ -35,13 +35,13 @@
 
 ### 2.2 API (Microsserviços)
 - **Validação de input**: 100% dos comandos têm `IValidator<T>` (FluentValidation). `ValidationBehaviour` garante que **nenhum handler executa com input inválido**.
-- **Mensagens de erro**: nunca expor stack trace ao cliente — `ValidationMiddleware` retorna apenas `errors[]` semânticos.
+- **Mensagens de erro**: nunca expor stack trace ao cliente `ValidationMiddleware` retorna apenas `errors[]` semânticos.
 - **Tratamento de exceções inesperadas** *(roadmap)*: middleware global que loga full stack e devolve 500 com `correlationId`.
 
 ### 2.3 Banco de Dados
 - **SQL parametrizado**: 100% das queries usam `@param` (Dapper). Zero risco de SQL injection.
 - **Conexão TLS**: SQL Server com `Encrypt=True;TrustServerCertificate=False` em produção.
-- **Princípio do menor privilégio** *(roadmap)*: usuário SQL da aplicação tem `db_datareader` + `db_datawriter` — **não** `db_owner`.
+- **Princípio do menor privilégio** *(roadmap)*: usuário SQL da aplicação tem `db_datareader` + `db_datawriter` **não** `db_owner`.
 - **TDE (Transparent Data Encryption)**: padrão em Azure SQL.
 
 ### 2.4 Secrets
@@ -53,10 +53,10 @@
 
 ---
 
-## 3. AuthN / AuthZ — Plano de evolução
+## 3. AuthN / AuthZ | Plano de evolução
 
 ### Hoje (placeholder)
-`appsettings.json` define `Jwt:Issuer`, `Jwt:Secret`, `Jwt:Expires` — mas **não há `[Authorize]` nas rotas**.
+`appsettings.json` define `Jwt:Issuer`, `Jwt:Secret`, `Jwt:Expires` mas **não há `[Authorize]` nas rotas**.
 
 ### Roadmap (passo-a-passo)
 
