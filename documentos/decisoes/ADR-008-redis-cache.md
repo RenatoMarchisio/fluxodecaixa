@@ -1,4 +1,4 @@
-# ADR-008 — Cache Distribuído Redis com TTL Inteligente (Relatório)
+# ADR-008 | Cache Distribuído Redis com TTL Inteligente (Relatório)
 
 - **Status:** Aceita
 - **Data:** 2026-04-27
