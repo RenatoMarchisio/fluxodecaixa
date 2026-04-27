@@ -39,8 +39,9 @@ docker compose version     # v2.x
 ### 2.1 Subir tudo
 
 ```bash
-cd FluxoDeCaixa/docker
-docker compose up -d --build
+cd FluxoDeCaixa
+docker compose -f docker/docker-compose.yml build --no-cache
+docker compose -f docker/docker-compose.yml up -d
 ```
 
 > O primeiro build leva ~3-5 minutos (download de imagens .NET SDK/runtime + restore de pacotes).
