@@ -39,7 +39,7 @@
 
 ### 1.1 Finalidade
 
-Este documento fornece uma visão geral abrangente da arquitetura do sistema **Fluxo de Caixa** — plataforma de controle financeiro. Detalha os componentes, integrações, padrões adotados, decisões de design e roadmap de evolução.
+Este documento fornece uma visão geral abrangente da arquitetura do sistema **Fluxo de Caixa** plataforma de controle financeiro. Detalha os componentes, integrações, padrões adotados, decisões de design e roadmap de evolução.
 
 Seguindo o modelo **C4** para descrição arquitetural em múltiplos níveis de abstração, complementado por diagramas UML de sequência e diagramas de deployment.
 
@@ -48,11 +48,11 @@ Seguindo o modelo **C4** para descrição arquitetural em múltiplos níveis de 
 
 Aplica-se ao sistema de **controle de lançamentos e consolidado diário**, composto por:
 
-- **Serviço de Lançamentos** (`FluxoDeCaixa.WebApi`) — recebe créditos e débitos via HTTP e os publica em fila RabbitMQ para processamento assíncrono.
-- **Serviço de Relatório** (`FluxoDeCaixaRelatorio.WebApi`) — consulta o consolidado diário com cache Redis.
-- **API Gateway** (`FluxoDeCaixa.Gateway`) — ponto único de entrada via YARP.
-- **Consumer DLQ** (`FluxoDeCaixa.DLQ`) — processa mensagens que falharam na fila principal.
-- **Infraestrutura compartilhada** — SQL Server, RabbitMQ (CloudAMQP), Redis.
+- **Serviço de Lançamentos** (`FluxoDeCaixa.WebApi`) recebe créditos e débitos via HTTP e os publica em fila RabbitMQ para processamento assíncrono.
+- **Serviço de Relatório** (`FluxoDeCaixaRelatorio.WebApi`) consulta o consolidado diário com cache Redis.
+- **API Gateway** (`FluxoDeCaixa.Gateway`) ponto único de entrada via YARP.
+- **Consumer DLQ** (`FluxoDeCaixa.DLQ`) processa mensagens que falharam na fila principal.
+- **Infraestrutura compartilhada** SQL Server, RabbitMQ (CloudAMQP), Redis.
 
 ### 1.3 Definições, Acrônimos e Abreviações
 
@@ -245,7 +245,7 @@ flowchart LR
 | **Stack tecnológica** | .NET 8, SQL Server, RabbitMQ, Redis |
 | **Banco relacional obrigatório** | SQL Server como repositório de lançamentos (desenvolvimento) |
 | **Sem front-end** | Sistema expõe apenas APIs REST; front-end é responsabilidade de outro time |
-| **CloudAMQP** | Broker RabbitMQ gerenciado — sem gestão de cluster próprio |
+| **CloudAMQP** | Broker RabbitMQ gerenciado sem gestão de cluster próprio |
 | **Conformidade LGPD** | Dados financeiros do comerciante tratados como dados sensíveis |
 
 ---
@@ -537,7 +537,7 @@ flowchart LR
 
 ### 9.2 Rastreabilidade
 
-- **CorrelationId** em cada `TransacaoMessage` — gerado no endpoint de Lançamentos, propagado até o consumer e DLQ.
+- **CorrelationId** em cada `TransacaoMessage` gerado no endpoint de Lançamentos, propagado até o consumer e DLQ.
 - Permite correlacionar um lançamento recebido via HTTP com sua persistência no SQL via log do consumer.
 
 ### 9.3 Health Checks (roadmap)
@@ -632,17 +632,17 @@ app.MapHealthChecks("/healthz/ready", new HealthCheckOptions { Predicate = check
 
 ### Resumo dos ADRs principais
 
-**ADR-001 — Microsserviços + API Gateway:** Processos separados garantem isolamento de falhas (RNF-01). YARP como gateway. Banco compartilhado nesta versão com path para database-per-service.
+**ADR-001 | Microsserviços + API Gateway:** Processos separados garantem isolamento de falhas (RNF-01). YARP como gateway. Banco compartilhado nesta versão com path para database-per-service.
 
-**ADR-002 — CQRS com MediatR:** Commands (escrita) e Queries (leitura) separados. Pipeline Behaviours centralizam validação, log e performance. Handlers são puros e facilmente testáveis.
+**ADR-002 | CQRS com MediatR:** Commands (escrita) e Queries (leitura) separados. Pipeline Behaviours centralizam validação, log e performance. Handlers são puros e facilmente testáveis.
 
-**ADR-003 — Dapper:** Micro-ORM mais rápido, explícito revisável por DBA. Performance adequada para 50 req/s com tabela pré-agregada.
+**ADR-003 | Dapper:** Micro-ORM mais rápido, explícito revisável por DBA. Performance adequada para 50 req/s com tabela pré-agregada.
 
-**ADR-007 — RabbitMQ:** Pipeline assíncrono decouples escrita do banco. Endpoint responde imediatamente após publish. DLQ garante segunda tentativa de persistência. `RequeueOnError=false` no DLQ evita loop infinito.
+**ADR-007 | RabbitMQ:** Pipeline assíncrono decouples escrita do banco. Endpoint responde imediatamente após publish. DLQ garante segunda tentativa de persistência. `RequeueOnError=false` no DLQ evita loop infinito.
 
-**ADR-008 — Redis:** Cache-on-First-Hit com TTL inteligente. Períodos passados: TTL 365 dias. Período atual: TTL até meia-noite. Elimina >99% das queries ao SQL no endpoint de relatório.
+**ADR-008 | Redis:** Cache-on-First-Hit com TTL inteligente. Períodos passados: TTL 365 dias. Período atual: TTL até meia-noite. Elimina >99% das queries ao SQL no endpoint de relatório.
 
-**ADR-009 — Testcontainers:** Camadas de teste: unitários (NSubstitute) + integração com containers efêmeros (SQL Server e RabbitMQ). CI/CD executa `dotnet test` sem dependências externas.
+**ADR-009 | Testcontainers:** Camadas de teste: unitários (NSubstitute) + integração com containers efêmeros (SQL Server e RabbitMQ). CI/CD executa `dotnet test` sem dependências externas.
 
 ---
 
