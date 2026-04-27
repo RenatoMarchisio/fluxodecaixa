@@ -1,4 +1,4 @@
-# SETUP — Fluxo de Caixa
+# SETUP | Fluxo de Caixa
 
 Guia detalhado para subir a solução **localmente** (.NET 8 + SQL Server) ou **via Docker** (recomendado, sem dependências locais além do Docker).
 
@@ -78,11 +78,12 @@ curl -X POST http://localhost:5000/api/FluxoDeCaixa/InsertDebito \
 curl "http://localhost:5000/api/FluxoDeCaixaRelatorio/Relatorio?inicio=2026-01-01&fim=2026-12-31"
 ```
 
-> **Nota** — a tabela `FluxoDeCaixaConsolidado` é alimentada por um job (na versão atual via SQL manual; no roadmap futuro via mensageria/Outbox). Para repopular agora, rode:
+> **Nota**: a tabela `FluxoDeCaixaConsolidado` é alimentada por um job SQLServer (SqlAgents disponível na versão Developer\Standard\Enterprise ) na versão atual via SQL manual, (no roadmap futuro via mensageria/Outbox). Para repopular agora, rode e execute o comando que vai criar um scheduled no windows para criar os registros do mês seguinte, no ultimo dia do mês atual.
 > ```sql
-> TRUNCATE TABLE FluxoDeCaixaConsolidado;
-> INSERT INTO FluxoDeCaixaConsolidado(dataFC, credito, debito)
->   SELECT dataFC, SUM(credito), SUM(debito) FROM FluxoDeCaixa GROUP BY dataFC;
+> sqlcmd -S "(localdb)\MSSQLLocalDB" -d fluxocaixa -E -Q "EXEC sp_CriarConsolidadoMesSeguinte"
+> ```
+> ```cmd
+> schtasks /create /tn "CreateFluxoDeCaixaRelatorioConsolidado" /tr "sqlcmd -S \"(localdb)\MSSQLLocalDB\" -d fluxocaixa -E -Q \"EXEC sp_CriarConsolidadoMesSeguinte\"" /sc monthly /mo LASTDAY /m * /st 23:59
 > ```
 
 ### 2.5 Derrubar tudo
@@ -117,7 +118,7 @@ sqllocaldb start mssqllocaldb
 sqlcmd -S "(localdb)\mssqllocaldb" -Q "IF DB_ID('FluxoCaixa') IS NULL CREATE DATABASE FluxoCaixa"
 
 # 3. Aplica o DDL
-sqlcmd -S "(localdb)\mssqllocaldb" -d FluxoCaixa -i "Sql\Create CML.sql"
+sqlcmd -S "(localdb)\mssqllocaldb" -d FluxoCaixa -i "Docker\Sql\init.sql"
 ```
 
 #### 3.2.2 SQL Server Express / Developer (Linux/macOS/Windows)
@@ -126,7 +127,7 @@ sqlcmd -S "(localdb)\mssqllocaldb" -d FluxoCaixa -i "Sql\Create CML.sql"
 sqlcmd -S "localhost,1433" -U sa -P "<sua-senha>" \
   -Q "IF DB_ID('FluxoCaixa') IS NULL CREATE DATABASE FluxoCaixa"
 sqlcmd -S "localhost,1433" -U sa -P "<sua-senha>" -d FluxoCaixa \
-  -i "Sql/Create CML.sql"
+  -i "Docker\Sql\init.sql"
 ```
 
 E ajuste o `appsettings.Development.json` de cada WebApi:
@@ -137,7 +138,7 @@ E ajuste o `appsettings.Development.json` de cada WebApi:
 }
 ```
 
-### 3.3 Subir os 3 serviços
+### 3.3 Subir os 4 serviços
 
 Em **três terminais**:
 
@@ -153,13 +154,17 @@ dotnet run --project src/FluxoDeCaixaRelatorio.WebApi
 # Terminal 3 — Gateway
 dotnet run --project src/FluxoDeCaixa.Gateway
 # Listening on https://localhost:5000
+
+# Terminal 4 — BackEnd DLQ
+dotnet run --project src/FluxoDeCaixaDLQ
+# Listening on https://localhost:5150
 ```
 
 > **Visual Studio 2022**: Solution → Properties → *Multiple startup projects* → Action = *Start* nos 3 projetos acima → F5.
 
 ### 3.4 Validar
 
-Abra https://localhost:5000/swagger — você deve ver as 3 APIs (Gateway, Fluxo de Caixa, Relatório) agregadas.
+Abra https://localhost:5000/swagger/index.html — você deve ver as 3 APIs (Gateway, Fluxo de Caixa, Relatório) agregadas.
 
 ---
 
@@ -201,6 +206,7 @@ No Docker, as variáveis são injetadas pelo `docker-compose.yml` — basta edit
 dotnet publish src/FluxoDeCaixa.WebApi          -c Release -o out/lancamentos
 dotnet publish src/FluxoDeCaixaRelatorio.WebApi -c Release -o out/relatorio
 dotnet publish src/FluxoDeCaixa.Gateway         -c Release -o out/gateway
+dotnet publish src/FluxoDeCaixaDLQ              -c Release -o out/DLQ
 ```
 
 ### 6.2 Build das imagens Docker (uma a uma)
@@ -209,6 +215,7 @@ dotnet publish src/FluxoDeCaixa.Gateway         -c Release -o out/gateway
 docker build -f docker/Dockerfile.lancamentos -t fluxodecaixa/lancamentos:latest .
 docker build -f docker/Dockerfile.relatorio   -t fluxodecaixa/relatorio:latest   .
 docker build -f docker/Dockerfile.gateway     -t fluxodecaixa/gateway:latest     .
+docker build -f docker/Dockerfile.dlq         -t fluxodecaixa/dlq:latest         .
 ```
 
 ### 6.3 Caminho recomendado para Cloud
