@@ -1,4 +1,4 @@
-# ADR-007 — Mensageria Assíncrona com RabbitMQ (CloudAMQP)
+# ADR-007 | Mensageria Assíncrona com RabbitMQ (CloudAMQP)
 
 - **Status:** Aceita
 - **Data:** 2026-04-27
@@ -28,7 +28,7 @@ Além disso, o requisito de **disponibilidade independente** entre escrita e lei
 2. **Consumo**: `FluxoDeCaixaMainConsumer` (BackgroundService) consome com `BasicQos(prefetchCount:1)` e **ack manual** — garante at-least-once delivery.
 3. **Dead-Letter Exchange**: fila `fluxodecaixa.queue` configurada com `x-dead-letter-exchange=fluxodecaixa.dlx`. Mensagens rejeitadas após `MaxRetries` são redirecionadas automaticamente para `fluxodecaixa.queue.dlq`.
 4. **Consumer DLQ**: processo separado (`FluxoDeCaixa.DLQ`) consome a DLQ com `RequeueOnError=false` — segunda chance de persistência sem loop infinito.
-5. **Persistência de mensagens**: `persistent=true` no publish — mensagens sobrevivem a restart do broker.
+5. **Persistência de mensagens**: `persistent=true` no publish mensagens sobrevivem a restart do broker.
 
 ## Consequências
 
