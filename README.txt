@@ -1,5 +1,5 @@
 ================================================================================
-  FLUXO DE CAIXA — SOLUÇÃO DE ARQUITETURA CORPORATIVA
+  FLUXO DE CAIXA | SOLUÇÃO DE ARQUITETURA CORPORATIVA
   Desafio do Arquiteto Corporativo de TI
 ================================================================================
 
@@ -57,8 +57,8 @@ Estilo:
 --------------------------------------------------------------------------------
 
 FluxoDeCaixa/
-  FluxoDeCaixa.sln              Solução .NET (12 projetos)
-  Sql/Create CML.sql            DDL das tabelas
+  FluxoDeCaixa.sln              Solução .NET 
+  docker/Sql/init.sql           DDL das tabelas
   docker/                       Imagens Docker + docker-compose
   docs/                         Documentação completa
     arquitetura/c4/             Modelo C4 (Contexto, Containers, Componentes, Código, Deploy)
@@ -76,7 +76,8 @@ FluxoDeCaixa/
     FluxoDeCaixa.Persistence/             DapperContext, Repositórios, UoW
     FluxoDeCaixa.WebApi/                  Microsserviço LANÇAMENTOS  (porta 8000)
     FluxoDeCaixaRelatorio.WebApi/         Microsserviço RELATÓRIO    (porta 8500)
-    FluxoDeCaixa.Gateway/                 API Gateway YARP            (porta 5000)
+    FluxoDeCaixa.Gateway/                 API Gateway YARP           (porta 5000)
+    FluxoDeCaixaDLQ/                      BackEnd DLQ                
 
 --------------------------------------------------------------------------------
 4) COMO EXECUTAR — DOCKER (RECOMENDADO)
@@ -98,12 +99,13 @@ Endereços:
 --------------------------------------------------------------------------------
 
    $ dotnet restore FluxoDeCaixa.sln
-   $ sqlcmd -S "(localdb)\mssqllocaldb" -i "Sql/Create CML.sql"
+   $ sqlcmd -S "(localdb)\mssqllocaldb" -i "docker/Sql/init.sql"
 
    # Em três terminais separados (ou Multi-startup do Visual Studio):
    $ dotnet run --project src/FluxoDeCaixa.WebApi
    $ dotnet run --project src/FluxoDeCaixaRelatorio.WebApi
    $ dotnet run --project src/FluxoDeCaixa.Gateway
+   $ dotnet run --project src/FluxoDeCaixaDLQ
 
 Detalhes em SETUP.md.
 
@@ -127,10 +129,10 @@ Resposta padrão (envelope BaseResponse<T>):
 --------------------------------------------------------------------------------
 
 Modelo C4 (Simon Brown):
-  docs/arquitetura/c4/01-contexto.md       Nível 1 — Contexto do sistema
-  docs/arquitetura/c4/02-containers.md     Nível 2 — Containers
-  docs/arquitetura/c4/03-componentes.md    Nível 3 — Componentes internos
-  docs/arquitetura/c4/04-codigo.md         Nível 4 — Detalhamento de classes
+  docs/arquitetura/c4/01-contexto.md       Nível 1 Contexto do sistema
+  docs/arquitetura/c4/02-containers.md     Nível 2 Containers
+  docs/arquitetura/c4/03-componentes.md    Nível 3 Componentes internos
+  docs/arquitetura/c4/04-codigo.md         Nível 4 Detalhamento de classes
   docs/arquitetura/c4/05-deploy.md         Diagrama de deployment
 
 UML:
