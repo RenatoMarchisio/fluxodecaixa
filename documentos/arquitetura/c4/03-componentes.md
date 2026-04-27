@@ -1,4 +1,4 @@
-# C4 — Nível 3: Componentes
+# C4 | Nível 3: Componentes
 
 > Cada container é "aberto" para mostrar seus **componentes lógicos internos** (assemblies/módulos .NET) e como eles colaboram.
 
