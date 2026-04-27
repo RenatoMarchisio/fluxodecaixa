@@ -16,6 +16,7 @@ WORKDIR /src
 # Copia sln + todos os csproj para cache de restore por camadas
 # (cada csproj em layer separada — rebuild só se o csproj mudar)
 COPY FluxoDeCaixa.sln ./
+COPY NuGet.config ./
 COPY src/FluxoDeCaixa.Domain/*.csproj                      src/FluxoDeCaixa.Domain/
 COPY src/FluxoDeCaixa.Application.Dto/*.csproj             src/FluxoDeCaixa.Application.Dto/
 COPY src/FluxoDeCaixa.Application.Interface/*.csproj       src/FluxoDeCaixa.Application.Interface/
@@ -26,14 +27,14 @@ COPY src/FluxoDeCaixa.WebApi/*.csproj                      src/FluxoDeCaixa.WebA
 # Demais projetos copiados para satisfazer o sln (não buildados aqui)
 COPY src/FluxoDeCaixaRelatorio.WebApi/*.csproj             src/FluxoDeCaixaRelatorio.WebApi/
 COPY src/FluxoDeCaixa.Gateway/*.csproj                     src/FluxoDeCaixa.Gateway/
-COPY src/FluxoDeCaixa.DLQ/FluxoDeCaixaDLQ.csproj           src/FluxoDeCaixa.DLQ/
+COPY src/FluxoDeCaixa.DLQ/*.csproj                         src/FluxoDeCaixa.DLQ/
 
 RUN dotnet restore src/FluxoDeCaixa.WebApi/FluxoDeCaixa.WebApi.csproj
 
 # Copia o restante do código e publica
 COPY . .
-RUN dotnet publish src/FluxoDeCaixa.WebApi/FluxoDeCaixa.WebApi.csproj \
-    -c Release -o /app/publish --no-restore /p:UseAppHost=false
+RUN dotnet publish src/FluxoDeCaixa.WebApi/FluxoDeCaixa.WebApi.csproj -c Release -o /app/publish /p:UseAppHost=false
+
 
 # -------- Stage 2: runtime -------------------------------------------
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
