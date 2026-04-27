@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.1.0" />
+    <PackageReference Include="Medo.Uuid7" Version="3.2.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FluxoDeCaixa.Application.UseCases\FluxoDeCaixa.Application.UseCases.csproj" />
+    <ProjectReference Include="..\FluxoDeCaixa.Domain\FluxoDeCaixa.Domain.csproj" />
+    <ProjectReference Include="..\FluxoDeCaixa.Infrastructure\FluxoDeCaixa.Infrastructure.csproj" />
+    <ProjectReference Include="..\FluxoDeCaixa.Persistence\FluxoDeCaixa.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

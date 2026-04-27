@@ -1,0 +1,49 @@
+# =====================================================================
+# Dockerfile — API Gateway YARP (FluxoDeCaixa.Gateway)
+# Multi-stage: build com SDK, executa com runtime ASP.NET (menor)
+# Build context esperado: raiz do repositório (FluxoDeCaixa/)
+#
+# Responsabilidades:
+#   - Ponto único de entrada HTTPS (porta 5000)
+#   - Roteia /api/FluxoDeCaixa/* → lancamentos:8000
+#   - Roteia /api/FluxoDeCaixaRelatorio/* → relatorio:8500
+#   - Agrega Swagger dos dois microsserviços
+# =====================================================================
+
+# -------- Stage 1: build ---------------------------------------------
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+COPY FluxoDeCaixa.sln ./
+COPY src/FluxoDeCaixa.Gateway/*.csproj                     src/FluxoDeCaixa.Gateway/
+# Demais projetos copiados para satisfazer o sln (não buildados aqui)
+COPY src/FluxoDeCaixa.Domain/*.csproj                      src/FluxoDeCaixa.Domain/
+COPY src/FluxoDeCaixa.Application.Dto/*.csproj             src/FluxoDeCaixa.Application.Dto/
+COPY src/FluxoDeCaixa.Application.Interface/*.csproj       src/FluxoDeCaixa.Application.Interface/
+COPY src/FluxoDeCaixa.Application.UseCases/*.csproj        src/FluxoDeCaixa.Application.UseCases/
+COPY src/FluxoDeCaixa.Infrastructure/*.csproj              src/FluxoDeCaixa.Infrastructure/
+COPY src/FluxoDeCaixa.Persistence/*.csproj                 src/FluxoDeCaixa.Persistence/
+COPY src/FluxoDeCaixa.WebApi/*.csproj                      src/FluxoDeCaixa.WebApi/
+COPY src/FluxoDeCaixaRelatorio.WebApi/*.csproj             src/FluxoDeCaixaRelatorio.WebApi/
+COPY src/FluxoDeCaixa.DLQ/FluxoDeCaixaDLQ.csproj           src/FluxoDeCaixa.DLQ/
+
+RUN dotnet restore src/FluxoDeCaixa.Gateway/FluxoDeCaixa.Gateway.csproj
+
+COPY . .
+RUN dotnet publish src/FluxoDeCaixa.Gateway/FluxoDeCaixa.Gateway.csproj \
+    -c Release -o /app/publish --no-restore /p:UseAppHost=false
+
+# -------- Stage 2: runtime -------------------------------------------
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+USER app
+
+ENV ASPNETCORE_ENVIRONMENT=Production \
+    ASPNETCORE_URLS=http://+:5000 \
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    DOTNET_USE_POLLING_FILE_WATCHER=false
+
+EXPOSE 5000
+
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "FluxoDeCaixa.Gateway.dll"]

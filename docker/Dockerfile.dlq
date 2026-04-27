@@ -1,0 +1,49 @@
+# =====================================================================
+# Dockerfile — Consumer Dead Letter Queue (FluxoDeCaixa.DLQ)
+# Multi-stage: build com SDK, executa com runtime ASP.NET (menor)
+# Build context esperado: raiz do repositório (FluxoDeCaixa/)
+#
+# Sem porta HTTP exposta — processo puro de BackgroundService.
+# Consome fluxodecaixa.queue.dlq via RabbitMQ (CloudAMQP AMQPS).
+# =====================================================================
+
+# -------- Stage 1: build ---------------------------------------------
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copia sln + todos os csproj para cache de restore por camadas
+COPY FluxoDeCaixa.sln ./
+COPY src/FluxoDeCaixa.Domain/*.csproj                      src/FluxoDeCaixa.Domain/
+COPY src/FluxoDeCaixa.Application.Dto/*.csproj             src/FluxoDeCaixa.Application.Dto/
+COPY src/FluxoDeCaixa.Application.Interface/*.csproj       src/FluxoDeCaixa.Application.Interface/
+COPY src/FluxoDeCaixa.Application.UseCases/*.csproj        src/FluxoDeCaixa.Application.UseCases/
+COPY src/FluxoDeCaixa.Infrastructure/*.csproj              src/FluxoDeCaixa.Infrastructure/
+COPY src/FluxoDeCaixa.Persistence/*.csproj                 src/FluxoDeCaixa.Persistence/
+COPY src/FluxoDeCaixa.DLQ/FluxoDeCaixaDLQ.csproj           src/FluxoDeCaixa.DLQ/
+# Demais projetos copiados apenas para satisfazer o sln (não são buildados aqui)
+COPY src/FluxoDeCaixa.WebApi/*.csproj                      src/FluxoDeCaixa.WebApi/
+COPY src/FluxoDeCaixaRelatorio.WebApi/*.csproj             src/FluxoDeCaixaRelatorio.WebApi/
+COPY src/FluxoDeCaixa.Gateway/*.csproj                     src/FluxoDeCaixa.Gateway/
+
+RUN dotnet restore src/FluxoDeCaixa.DLQ/FluxoDeCaixaDLQ.csproj
+
+# Copia o restante do código e publica
+COPY . .
+RUN dotnet publish src/FluxoDeCaixa.DLQ/FluxoDeCaixaDLQ.csproj \
+    -c Release -o /app/publish --no-restore /p:UseAppHost=false
+
+# -------- Stage 2: runtime -------------------------------------------
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+# Usuário non-root (já existe na imagem oficial)
+USER app
+
+ENV ASPNETCORE_ENVIRONMENT=Production \
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    DOTNET_USE_POLLING_FILE_WATCHER=false
+
+# Sem EXPOSE — DLQ Consumer não expõe porta HTTP
+
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "FluxoDeCaixaDLQ.dll"]

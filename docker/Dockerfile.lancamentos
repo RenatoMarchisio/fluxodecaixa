@@ -1,0 +1,53 @@
+# =====================================================================
+# Dockerfile — Microsserviço de LANÇAMENTOS (FluxoDeCaixa.WebApi)
+# Multi-stage: build com SDK, executa com runtime ASP.NET (menor)
+# Build context esperado: raiz do repositório (FluxoDeCaixa/)
+#
+# Responsabilidades:
+#   - Valida lançamentos e publica no RabbitMQ (CloudAMQP AMQPS)
+#   - FluxoDeCaixaMainConsumer (BackgroundService) consome a fila
+#     principal e persiste + faz UPSERT no consolidado
+# =====================================================================
+
+# -------- Stage 1: build ---------------------------------------------
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copia sln + todos os csproj para cache de restore por camadas
+# (cada csproj em layer separada — rebuild só se o csproj mudar)
+COPY FluxoDeCaixa.sln ./
+COPY src/FluxoDeCaixa.Domain/*.csproj                      src/FluxoDeCaixa.Domain/
+COPY src/FluxoDeCaixa.Application.Dto/*.csproj             src/FluxoDeCaixa.Application.Dto/
+COPY src/FluxoDeCaixa.Application.Interface/*.csproj       src/FluxoDeCaixa.Application.Interface/
+COPY src/FluxoDeCaixa.Application.UseCases/*.csproj        src/FluxoDeCaixa.Application.UseCases/
+COPY src/FluxoDeCaixa.Infrastructure/*.csproj              src/FluxoDeCaixa.Infrastructure/
+COPY src/FluxoDeCaixa.Persistence/*.csproj                 src/FluxoDeCaixa.Persistence/
+COPY src/FluxoDeCaixa.WebApi/*.csproj                      src/FluxoDeCaixa.WebApi/
+# Demais projetos copiados para satisfazer o sln (não buildados aqui)
+COPY src/FluxoDeCaixaRelatorio.WebApi/*.csproj             src/FluxoDeCaixaRelatorio.WebApi/
+COPY src/FluxoDeCaixa.Gateway/*.csproj                     src/FluxoDeCaixa.Gateway/
+COPY src/FluxoDeCaixa.DLQ/FluxoDeCaixaDLQ.csproj           src/FluxoDeCaixa.DLQ/
+
+RUN dotnet restore src/FluxoDeCaixa.WebApi/FluxoDeCaixa.WebApi.csproj
+
+# Copia o restante do código e publica
+COPY . .
+RUN dotnet publish src/FluxoDeCaixa.WebApi/FluxoDeCaixa.WebApi.csproj \
+    -c Release -o /app/publish --no-restore /p:UseAppHost=false
+
+# -------- Stage 2: runtime -------------------------------------------
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+# Usuário non-root (já existe na imagem oficial)
+USER app
+
+ENV ASPNETCORE_ENVIRONMENT=Production \
+    ASPNETCORE_URLS=http://+:8000 \
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    DOTNET_USE_POLLING_FILE_WATCHER=false
+
+EXPOSE 8000
+
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "FluxoDeCaixa.WebApi.dll"]

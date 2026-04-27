@@ -1,0 +1,175 @@
+# =====================================================================
+# docker-compose.yml — Stack de containers do Fluxo de Caixa
+#
+# O que roda em CONTAINER:
+#   - redis          Cache distribuído para o Serviço de Relatório  (:6379)
+#   - lancamentos    Microsserviço de Lançamentos                   (:8000)
+#   - relatorio      Microsserviço de Relatório                     (:8500)
+#   - dlq            Consumer Dead Letter Queue                     (sem porta HTTP)
+#   - gateway        API Gateway YARP                               (:5000)
+#
+# O que NÃO roda em container (infraestrutura pré-existente):
+#   - SQL Server     Instância local do Visual Studio 2022.
+#                    Os containers acessam via host.docker.internal,1433
+#                    REQUISITO: TCP/IP habilitado no SQL Server Configuration Manager
+#                               + porta 1433 liberada no firewall do host
+#                    NOTA Linux/Mac: substitua host.docker.internal pelo IP da máquina host
+#
+#   - RabbitMQ       CloudAMQP (serviço gerenciado externo — AMQPS)
+#                    URL configurada diretamente nas variáveis de ambiente
+#
+# Uso:
+#   cd FluxoDeCaixa/docker
+#   docker compose up -d --build
+# =====================================================================
+
+name: fluxocaixa
+
+services:
+
+  # -------------------------------------------------------------------
+  # Redis — Cache distribuído (Cache-on-First-Hit do Relatório)
+  # -------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: fluxocaixa-redis
+    command: redis-server --save "" --appendonly no --maxmemory 128mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    networks: [fluxocaixa-net]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # -------------------------------------------------------------------
+  # Microsserviço: LANÇAMENTOS
+  # Publica lançamentos no RabbitMQ (CloudAMQP) e consome a fila
+  # principal via FluxoDeCaixaMainConsumer (BackgroundService).
+  # Conecta ao SQL Server do host via host.docker.internal,1433
+  # -------------------------------------------------------------------
+  lancamentos:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.lancamentos
+    image: fluxodecaixa/lancamentos:latest
+    container_name: fluxocaixa-lancamentos
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8000"
+      # SQL Server do Visual Studio 2022 no host
+      ConnectionStrings__FluxoDeCaixaConnection: >-
+        Server=host.docker.internal,1433;
+        Database=FluxoCaixa;
+        User Id=sa;
+        Password=Fluxo@2026Dev!;
+        TrustServerCertificate=True;
+        Encrypt=False
+      # RabbitMQ externo (CloudAMQP) — substitua pelas suas credenciais
+      RabbitMQ__ConnectionString: "amqps://jxsdbhlb:WO9hwZCzEj8MoQm40gyxbzPVjQnnmGUu@moose.rmq.cloudamqp.com/jxsdbhlb"
+      RabbitMQ__QueueName: "fluxodecaixa.queue"
+      RabbitMQ__DeadLetterQueueName: "fluxodecaixa.queue.dlq"
+      RabbitMQ__ExchangeName: "fluxodecaixa.exchange"
+      RabbitMQ__MaxRetries: "3"
+    ports:
+      - "8000:8000"
+    networks: [fluxocaixa-net]
+    restart: unless-stopped
+
+  # -------------------------------------------------------------------
+  # Microsserviço: RELATÓRIO
+  # Consulta FluxoDeCaixaConsolidado com Cache-on-First-Hit Redis.
+  # -------------------------------------------------------------------
+  relatorio:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.relatorio
+    image: fluxodecaixa/relatorio:latest
+    container_name: fluxocaixa-relatorio
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8500"
+      # SQL Server do Visual Studio 2022 no host
+      ConnectionStrings__FluxoDeCaixaConnection: >-
+        Server=host.docker.internal,1433;
+        Database=FluxoCaixa;
+        User Id=sa;
+        Password=Fluxo@2026Dev!;
+        TrustServerCertificate=True;
+        Encrypt=False
+      # Redis no container (nome do serviço resolve via DNS interno do Compose)
+      Redis__ConnectionString: "redis:6379"
+    ports:
+      - "8500:8500"
+    networks: [fluxocaixa-net]
+    restart: unless-stopped
+
+  # -------------------------------------------------------------------
+  # Consumer DLQ — Dead Letter Queue
+  # Consome fluxodecaixa.queue.dlq e tenta persistir sem requeue.
+  # Sem porta HTTP exposta — processo puro de background.
+  # -------------------------------------------------------------------
+  dlq:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dlq
+    image: fluxodecaixa/dlq:latest
+    container_name: fluxocaixa-dlq
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      # SQL Server do Visual Studio 2022 no host
+      ConnectionStrings__FluxoDeCaixaConnection: >-
+        Server=host.docker.internal,1433;
+        Database=FluxoCaixa;
+        User Id=sa;
+        Password=Fluxo@2026Dev!;
+        TrustServerCertificate=True;
+        Encrypt=False
+      # RabbitMQ externo (CloudAMQP)
+      RabbitMQ__ConnectionString: "amqps://jxsdbhlb:WO9hwZCzEj8MoQm40gyxbzPVjQnnmGUu@moose.rmq.cloudamqp.com/jxsdbhlb"
+      RabbitMQ__QueueName: "fluxodecaixa.queue"
+      RabbitMQ__DeadLetterQueueName: "fluxodecaixa.queue.dlq"
+      RabbitMQ__ExchangeName: "fluxodecaixa.exchange"
+      RabbitMQ__MaxRetries: "3"
+    networks: [fluxocaixa-net]
+    restart: unless-stopped
+
+  # -------------------------------------------------------------------
+  # API GATEWAY (YARP)
+  # Ponto único de entrada. Roteamento para lancamentos e relatorio.
+  # ASPNETCORE_ENVIRONMENT=Development mantém o Swagger UI ligado.
+  # -------------------------------------------------------------------
+  gateway:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.gateway
+    image: fluxodecaixa/gateway:latest
+    container_name: fluxocaixa-gateway
+    depends_on:
+      - lancamentos
+      - relatorio
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:5000"
+      # Sobrescreve os destinos do YARP para os serviços internos do Compose
+      ReverseProxy__Clusters__mainApiCluster__Destinations__mainApiDestination__Address: "http://lancamentos:8000"
+      ReverseProxy__Clusters__relatorioApiCluster__Destinations__relatorioApiDestination__Address: "http://relatorio:8500"
+    ports:
+      - "5000:5000"
+    networks: [fluxocaixa-net]
+    restart: unless-stopped
+
+# =====================================================================
+# Rede interna
+# =====================================================================
+networks:
+  fluxocaixa-net:
+    driver: bridge

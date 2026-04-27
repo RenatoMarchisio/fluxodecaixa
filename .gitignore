@@ -1,0 +1,16 @@
+# Pastas de saída da compilação (Debug/Release)
+[Bb]in/
+[Oo]bj/
+
+# Pastas específicas do Visual Studio
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# Arquivos de log e temporários
+*.log
+TestResults/
+
+# Pasta de pacotes do NuGet (geralmente restaurados automaticamente)
+packages/
