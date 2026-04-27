@@ -1,4 +1,4 @@
-# C4 — Nível 2: Containers
+# C4 | Nível 2: Containers
 
 > Cada caixa abaixo é um **processo executável** ou **datastore** (um "container" no sentido C4 — não confundir com container Docker, embora coincidam aqui).
 
@@ -84,12 +84,12 @@ flowchart TB
 ## 4. Por que esta arquitetura?
 
 ### 4.1 Fluxo assíncrono via RabbitMQ
-O endpoint de Lançamentos responde **imediatamente** após publicar no broker — o cliente não aguarda INSERT no SQL. Se o banco cair, as mensagens permanecem na fila; ao recuperar, o consumer drena sem perda. A **DLQ separada** garante segunda tentativa de persistência com rastreabilidade e **sem loop infinito** (`RequeueOnError = false`).
+O endpoint de Lançamentos responde **imediatamente** após publicar no broker → o cliente não aguarda INSERT no SQL. Se o banco cair, as mensagens permanecem na fila; ao recuperar, o consumer drena sem perda. A **DLQ separada** garante segunda tentativa de persistência com rastreabilidade e **sem loop infinito** (`RequeueOnError = false`).
 
 ### 4.2 Cache Redis no Relatório
 Dados de períodos passados são **imutáveis** → TTL de 365 dias (quase permanente).
 Período atual pode receber novos lançamentos → TTL até meia-noite UTC.
-Isso elimina o pico de **50 req/s** sobre o SQL Server — >99% dos requests servidos do cache após o primeiro hit.
+Isso elimina o pico de **50 req/s** sobre o SQL Server 99% dos requests servidos do cache após o primeiro hit.
 
 ### 4.3 API Gateway como container dedicado
 Ponto único para clientes externos. Onde adicionar cross-cutting concerns futuros: rate-limit (`AspNetCoreRateLimit`), circuit-breaker (Polly), autenticação OIDC, correlação W3C `traceparent`.
