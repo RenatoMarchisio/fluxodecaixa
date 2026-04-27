@@ -20,7 +20,7 @@ flowchart LR
   class V4,V5,V6,V7 core
 ```
 
-A solução cobre as etapas em destaque (azul): **registrar lançamentos** (V4, V5), **consolidar** (V6) e **reportar** (V7) — a cauda direta da cadeia financeira.
+A solução cobre as etapas em destaque (azul): **registrar lançamentos** (V4, V5), **consolidar** (V6) e **reportar** (V7) a cauda direta da cadeia financeira.
 
 ---
 
@@ -94,7 +94,7 @@ flowchart LR
 
 ## 5. Eventos de Domínio
 
-Já modelados como **classes** (em `FluxoDeCaixa.Domain.Events`) — ainda não publicados em broker, mas pronto para o Outbox Pattern (roadmap):
+Já modelados como **classes** (em `FluxoDeCaixa.Domain.Events`) ainda não publicados em broker, mas pronto para o Outbox Pattern (roadmap):
 
 ```csharp
 public abstract class FluxoDeCaixaCreatedBaseEvent : BaseEvent
