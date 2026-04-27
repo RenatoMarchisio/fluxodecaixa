@@ -27,7 +27,7 @@ flowchart LR
 
 ## 2. Arquitetura de Transição (Strangler Fig)
 
-> Padrão **Strangler Fig** (Martin Fowler) — o novo sistema "estrangula" o legado gradualmente, função por função.
+> Padrão **Strangler Fig** (Martin Fowler) o novo sistema "estrangula" o legado gradualmente, função por função.
 
 ```mermaid
 flowchart LR
@@ -90,9 +90,9 @@ flowchart LR
 - **Squad Migração** (3 pessoas, temporário em F0-F3): backfill, sync, conciliação.
 
 ### Cerimônias adicionais (durante a transição)
-- **Daily de migração** (15 min) — alinhamento entre Plataforma + Squad Migração.
-- **Reconciliation review** (semanal) — revisão dos relatórios de divergência.
-- **Architecture review board** (quinzenal) — aprovar ADRs.
+- **Daily de migração** (15 min) alinhamento entre Plataforma + Squad Migração.
+- **Reconciliation review** (semanal) revisão dos relatórios de divergência.
+- **Architecture review board** (quinzenal) aprovar ADRs.
 
 ---
 
