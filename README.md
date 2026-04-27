@@ -1,6 +1,6 @@
-# Fluxo de Caixa — Solução de Arquitetura Corporativa
+# Fluxo de Caixa | Solução de Arquitetura Corporativa
 
-> Desafio do Arquiteto Corporativo de TI — Implementação de referência em **.NET 8 / C#** com **Clean Architecture + CQRS + Microsserviços + API Gateway**.
+> Desafio do Arquiteto Corporativo de TI / Implementação de referência em **.NET 8 / C#** com **Clean Architecture + CQRS + Microsserviços + API Gateway**.
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
 [![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927?logo=microsoftsqlserver&logoColor=white)](https://www.microsoft.com/sql-server)
@@ -11,7 +11,7 @@
 
 ## 1. Sumário
 
-- [Fluxo de Caixa — Solução de Arquitetura Corporativa](#fluxo-de-caixa--solução-de-arquitetura-corporativa)
+- [Fluxo de Caixa | Solução de Arquitetura Corporativa](#fluxo-de-caixa--solução-de-arquitetura-corporativa)
   - [1. Sumário](#1-sumário)
   - [2. Visão Geral](#2-visão-geral)
     - [Problema de negócio](#problema-de-negócio)
@@ -251,25 +251,25 @@ Devolve o **consolidado diário** (saldo de crédito × débito por data) no per
 
 | Documento | Descrição |
 |---|---|
-| **[`docs/arquitetura/c4/01-contexto.md`](docs/arquitetura/c4/01-contexto.md)** | C4 Nível 1 — Diagrama de Contexto |
-| **[`docs/arquitetura/c4/02-containers.md`](docs/arquitetura/c4/02-containers.md)** | C4 Nível 2 — Containers (microsserviços, gateway, BD) |
-| **[`docs/arquitetura/c4/03-componentes.md`](docs/arquitetura/c4/03-componentes.md)** | C4 Nível 3 — Componentes internos de cada serviço |
-| **[`docs/arquitetura/c4/04-codigo.md`](docs/arquitetura/c4/04-codigo.md)** | C4 Nível 4 — Detalhamento de classes-chave |
+| **[`docs/arquitetura/c4/01-contexto.md`](docs/arquitetura/c4/01-contexto.md)** | C4 Nível 1 Diagrama de Contexto |
+| **[`docs/arquitetura/c4/02-containers.md`](docs/arquitetura/c4/02-containers.md)** | C4 Nível 2 Containers (microsserviços, gateway, BD) |
+| **[`docs/arquitetura/c4/03-componentes.md`](docs/arquitetura/c4/03-componentes.md)** | C4 Nível 3 Componentes internos de cada serviço |
+| **[`docs/arquitetura/c4/04-codigo.md`](docs/arquitetura/c4/04-codigo.md)** | C4 Nível 4 Detalhamento de classes-chave |
 | **[`docs/arquitetura/c4/05-deploy.md`](docs/arquitetura/c4/05-deploy.md)** | Diagrama de Deploy (Docker, Cloud target) |
 | **[`docs/arquitetura/uml/classes.md`](docs/arquitetura/uml/classes.md)** | UML — Diagrama de Classes |
 | **[`docs/arquitetura/uml/sequencia-lancamento.md`](docs/arquitetura/uml/sequencia-lancamento.md)** | UML — Sequência: Lançar Crédito/Débito |
 | **[`docs/arquitetura/uml/sequencia-relatorio.md`](docs/arquitetura/uml/sequencia-relatorio.md)** | UML — Sequência: Consultar Relatório Consolidado |
-| **[`docs/arquitetura/uml/componentes.md`](docs/arquitetura/uml/componentes.md)** | UML — Diagrama de Componentes |
-| **[`docs/arquitetura/uml/atividade.md`](docs/arquitetura/uml/atividade.md)** | UML — Atividade do pipeline de Validação/CQRS |
-| **[`docs/arquitetura/uml/casos-de-uso.md`](docs/arquitetura/uml/casos-de-uso.md)** | UML — Casos de Uso |
+| **[`docs/arquitetura/uml/componentes.md`](docs/arquitetura/uml/componentes.md)** | UML Diagrama de Componentes |
+| **[`docs/arquitetura/uml/atividade.md`](docs/arquitetura/uml/atividade.md)** | UML Atividade do pipeline de Validação/CQRS |
+| **[`docs/arquitetura/uml/casos-de-uso.md`](docs/arquitetura/uml/casos-de-uso.md)** | UML Casos de Uso |
 | **[`docs/dominio/dominio-e-capacidades.md`](docs/dominio/dominio-e-capacidades.md)** | Mapa de Domínio Funcional & Capacidades de Negócio |
 | **[`docs/requisitos/requisitos.md`](docs/requisitos/requisitos.md)** | Requisitos funcionais e não funcionais (refinados) |
-| **[`docs/decisoes/ADR-001-microsservicos.md`](docs/decisoes/ADR-001-microsservicos.md)** | ADR — Por que Microsserviços |
-| **[`docs/decisoes/ADR-002-cqrs-mediatr.md`](docs/decisoes/ADR-002-cqrs-mediatr.md)** | ADR — Por que CQRS com MediatR |
-| **[`docs/decisoes/ADR-003-dapper.md`](docs/decisoes/ADR-003-dapper.md)** | ADR — Por que Dapper (vs EF Core) |
-| **[`docs/decisoes/ADR-004-yarp-gateway.md`](docs/decisoes/ADR-004-yarp-gateway.md)** | ADR — Por que YARP como Gateway |
-| **[`docs/decisoes/ADR-005-uuidv7.md`](docs/decisoes/ADR-005-uuidv7.md)** | ADR — Por que UUIDv7 como identificador |
-| **[`docs/decisoes/ADR-006-resiliencia.md`](docs/decisoes/ADR-006-resiliencia.md)** | ADR — Estratégia de Resiliência (50 req/s, 95% uptime) |
+| **[`docs/decisoes/ADR-001-microsservicos.md`](docs/decisoes/ADR-001-microsservicos.md)** | ADR Por que Microsserviços |
+| **[`docs/decisoes/ADR-002-cqrs-mediatr.md`](docs/decisoes/ADR-002-cqrs-mediatr.md)** | ADR Por que CQRS com MediatR |
+| **[`docs/decisoes/ADR-003-dapper.md`](docs/decisoes/ADR-003-dapper.md)** | ADR Por que Dapper (vs EF Core) |
+| **[`docs/decisoes/ADR-004-yarp-gateway.md`](docs/decisoes/ADR-004-yarp-gateway.md)** | ADR Por que YARP como Gateway |
+| **[`docs/decisoes/ADR-005-uuidv7.md`](docs/decisoes/ADR-005-uuidv7.md)** | ADR Por que UUIDv7 como identificador |
+| **[`docs/decisoes/ADR-006-resiliencia.md`](docs/decisoes/ADR-006-resiliencia.md)** | ADR Estratégia de Resiliência (50 req/s, 95% uptime) |
 | **[`docs/operacao/seguranca.md`](docs/operacao/seguranca.md)** | Segurança (AuthN/AuthZ, criptografia, hardening) |
 | **[`docs/operacao/observabilidade.md`](docs/operacao/observabilidade.md)** | Observabilidade (logs, métricas, traces) |
 | **[`docs/operacao/custos.md`](docs/operacao/custos.md)** | Estimativa de custos de infraestrutura |
