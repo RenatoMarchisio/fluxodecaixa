@@ -1,4 +1,4 @@
-# UML — Diagrama de Componentes
+# UML | Diagrama de Componentes
 
 > Mapa de assemblies (.dll) da solução e suas dependências de compilação.
 
