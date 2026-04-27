@@ -1,4 +1,4 @@
-# ADR-009 — Estratégia de Testes com xUnit, NSubstitute e Testcontainers
+# ADR-009 | Estratégia de Testes com xUnit, NSubstitute e Testcontainers
 
 - **Status:** Aceita
 - **Data:** 2026-04-27
@@ -49,7 +49,7 @@ O projeto usa Dapper com SQL Server e RabbitMQ como infraestruturas críticas. T
 ### Positivas
 - Detecta bugs reais em queries Dapper (MERGE, BETWEEN, DateOnly mapping).
 - CI/CD pode rodar `dotnet test` sem pré-configurar banco ou broker (Testcontainers cuida disso).
-- Handlers são testados de forma isolada (NSubstitute) — sem acoplamento a infra.
+- Handlers são testados de forma isolada (NSubstitute) sem acoplamento a infra.
 - Fixtures com `IClassFixture` / `ICollectionFixture` reutilizam containers entre testes do mesmo grupo → performance.
 
 ### Negativas / Mitigações
