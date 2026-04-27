@@ -1,4 +1,4 @@
-# C4 — Nível 4: Código
+# C4 | Nível 4: Código
 
 > Detalhamento das **classes-chave** e fluxos de execução atualizados. O código completo está em `src/`.
 
@@ -58,9 +58,9 @@ group.MapPost("/InsertCredito", async (
 ```
 
 **Pontos-chave:**
-- Validação FluentValidation **inline** (sem MediatR neste ponto — simples e rápido).
+- Validação FluentValidation **inline** (sem MediatR neste ponto simples e rápido).
 - `TransacaoMessage` é um **record imutável** com `CorrelationId` para rastreabilidade.
-- `PublicarAsync` é fire-and-forget assíncrono — o endpoint **não aguarda** o consumo.
+- `PublicarAsync` é fire-and-forget assíncrono o endpoint **não aguarda** o consumo.
 
 ---
 
@@ -94,7 +94,7 @@ protected override async Task ProcessarAsync(
 ```
 
 **Pontos-chave:**
-- Executa dentro de um `IServiceScope` — repositórios `Scoped` por mensagem.
+- Executa dentro de um `IServiceScope` repositórios `Scoped` por mensagem.
 - Chama INSERT + UPSERT na mesma unidade lógica.
 - Exceção → `RabbitMqConsumerBase` faz `Nack + requeue`; após MaxRetries → `Reject` (→ DLQ automático pelo broker).
 
@@ -124,7 +124,7 @@ public async Task UpsertAsync(DateOnly dataFc, decimal credito, decimal debito)
 ```
 
 **Pontos-chave:**
-- `MERGE` é atômico — sem race condition entre consumidores paralelos.
+- `MERGE` é atômico sem race condition entre consumidores paralelos.
 - Acumula valores: crédito total = crédito anterior + novo crédito.
 - Garante que `FluxoDeCaixaConsolidado` sempre reflita o saldo real por data.
 
@@ -220,7 +220,7 @@ public sealed class FluxoDeCaixaDlqConsumer : RabbitMqConsumerBase
 
 **Pontos-chave:**
 - `RequeueOnError = false` → em falha, a mensagem é descartada (apenas log). Sem risco de loop.
-- Mesma lógica de persistência do consumer principal — a segunda chance é idêntica.
+- Mesma lógica de persistência do consumer principal a segunda chance é idêntica.
 - Projeto **separado** do Lançamentos: falha no DLQ não afeta o consumo da fila principal.
 
 ---
