@@ -1,4 +1,4 @@
-# ADR-003 — Persistência com Dapper (em vez de Entity Framework Core)
+# ADR-003 | Persistência com Dapper (em vez de Entity Framework Core)
 
 - **Status:** Aceita
 - **Data:** 2026-04-26
@@ -27,7 +27,7 @@ Para o caminho de escrita, os comandos são `INSERT` simples sem grafos de objet
 **Dapper 2.1.x** sobre `System.Data.SqlClient`. Justificativas:
 
 1. **Performance**: micro-ORM com overhead próximo de zero. Cada handler roda em <10ms com folga (limiar do `PerformanceBehaviour`).
-2. **SQL explícito**: o time financeiro precisa **revisar e tunar queries** — LINQ-to-SQL torna isso opaco.
+2. **SQL explícito**: o time financeiro precisa **revisar e tunar queries** LINQ-to-SQL torna isso opaco.
 3. **Cold-start desprezível**: importante em serverless / autoscale.
 4. **Mapeamentos customizados** (ex.: `DateOnly` ↔ `DATE`) são triviais via `SqlMapper.AddTypeHandler`.
 
@@ -65,4 +65,4 @@ Sem isso, `DateOnly` daria `InvalidCastException` ao mapear para `DATE` do SQL S
 - ✅ Performance e previsibilidade.
 - ✅ DBA pode revisar e otimizar SQL diretamente.
 - ⚠️ Migrations precisam ser disciplinadas (versionadas em `Sql/`).
-- ⚠️ Repos precisam ser testados (integração com banco) — recomendado **Testcontainers** com container SQL Server efêmero (roadmap).
+- ⚠️ Repos precisam ser testados (integração com banco) recomendado **Testcontainers** com container SQL Server efêmero (roadmap).
