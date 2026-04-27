@@ -1,4 +1,4 @@
-# ADR-004 — API Gateway com YARP (Microsoft)
+# ADR-004 | API Gateway com YARP (Microsoft)
 
 - **Status:** Aceita
 - **Data:** 2026-04-26
@@ -47,14 +47,14 @@ Decidido em ADR-001 ter um Gateway. Precisamos escolher **qual**.
 | **Rate limit** | `AspNetCoreRateLimit` (lib NuGet) ou `services.AddRateLimiter(...)` (built-in .NET 8) |
 | **Circuit breaker** | `Polly` no `HttpClient` injetado no YARP destino |
 | **CORS** | Já configurado; refinar `AllowAnyOrigin` para origens específicas em produção |
-| **Header propagation** | YARP `Transforms` — propagar `traceparent`, `Authorization`, `X-Forwarded-For` |
+| **Header propagation** | YARP `Transforms` propagar `traceparent`, `Authorization`, `X-Forwarded-For` |
 | **mTLS** entre Gateway e microsserviços | YARP `HttpClient` com certificado de cliente |
 | **Métricas Prometheus** | `prometheus-net.AspNetCore` middleware no Kestrel |
 
 ## Consequências
 
 - ✅ Adicionar uma feature no Gateway é **uma classe C#**, não um plugin de outra plataforma.
-- ✅ Testabilidade alta — Gateway é uma WebApi como outra qualquer.
+- ✅ Testabilidade alta Gateway é uma WebApi como outra qualquer.
 - ✅ Mesmo time de back-end (.NET) consegue evoluir.
-- ⚠️ Single point of failure — mitigado com **2+ réplicas** atrás de Load Balancer/Front Door.
-- ⚠️ Cuidado para não virar **monólito de cross-cutting** — manter "magro": só roteamento, auth, rate-limit, observabilidade.
+- ⚠️ Single point of failure mitigado com **2+ réplicas** atrás de Load Balancer/Front Door.
+- ⚠️ Cuidado para não virar **monólito de cross-cutting** manter "magro": só roteamento, auth, rate-limit, observabilidade.
