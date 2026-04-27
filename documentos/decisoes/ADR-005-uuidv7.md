@@ -1,4 +1,4 @@
-# ADR-005 — Usar UUIDv7 como identificador da entidade FluxoDeCaixa
+# ADR-005 | Usar UUIDv7 como identificador da entidade FluxoDeCaixa
 
 - **Status:** Aceita
 - **Data:** 2026-04-26
@@ -42,16 +42,16 @@ public abstract class CreateFluxoDeCaixaBaseCommand : IRequest<BaseResponse<bool
 
 ## Por quê
 
-1. **Cluster-friendly** — ordenado por tempo, INSERTs vão sempre na "ponta direita" do B-tree, eliminando fragmentação.
-2. **Idempotência** — o cliente recebe o `ID` no `BaseResponse` (ou ele mesmo gera no client-side em retry); se o cliente fizer retry com mesmo `ID`, o INSERT falha pela PK e o sistema responde "já existe" sem duplicar.
-3. **Cliente-side friendly** — não precisa esperar o servidor para saber o ID (útil para *eventually consistent* e command-bus async).
+1. **Cluster-friendly** ordenado por tempo, INSERTs vão sempre na "ponta direita" do B-tree, eliminando fragmentação.
+2. **Idempotência** o cliente recebe o `ID` no `BaseResponse` (ou ele mesmo gera no client-side em retry); se o cliente fizer retry com mesmo `ID`, o INSERT falha pela PK e o sistema responde "já existe" sem duplicar.
+3. **Cliente-side friendly** não precisa esperar o servidor para saber o ID (útil para *eventually consistent* e command-bus async).
 4. **Padrão moderno** — RFC 9562 publicada em 2024, suportada por bibliotecas em todas as stacks.
 
 ## Consequências
 
 - ✅ Performance de INSERT estável mesmo em milhões de linhas.
 - ✅ Logs e índices ordenam naturalmente por tempo (debugging mais fácil).
-- ⚠️ Tipo `Guid` no SQL = 16 bytes — não economiza espaço vs `BIGINT` (8 bytes), mas dá distribuição global (ID único entre serviços/regiões).
+- ⚠️ Tipo `Guid` no SQL = 16 bytes não economiza espaço vs `BIGINT` (8 bytes), mas dá distribuição global (ID único entre serviços/regiões).
 - ⚠️ Bibliotecas mais antigas podem não reconhecer o "subtipo" v7 — tratam como v4 (sem prejuízo, só perdem a ordenação semântica).
 
 ## Referências
