@@ -1,4 +1,4 @@
-# ADR-006 — Estratégia de Resiliência e Performance (50 req/s, 95% de uptime)
+# ADR-006 | Estratégia de Resiliência e Performance (50 req/s, 95% de uptime)
 
 - **Status:** Aceita
 - **Data:** 2026-04-26
@@ -38,14 +38,14 @@ A tabela `FluxoDeCaixaConsolidado` armazena `(dataFC, credito, debito)` já agre
 SELECT * FROM FluxoDeCaixaConsolidado WHERE DataFC BETWEEN @inicio AND @fim
 ```
 
-Com índice clustered em `dataFC DESC`, é uma **range-scan** O(log n) — sub-milissegundo mesmo para 10 anos de dados.
+Com índice clustered em `dataFC DESC`, é uma **range-scan** O(log n) sub-milissegundo mesmo para 10 anos de dados.
 
 ### 3. Cache distribuído no Gateway (RNF-02)
 **(roadmap)** Redis com chave `rel:{inicio}:{fim}` e TTL = `endOfDay(fim)`. Hit-rate esperado >99% para queries do "hoje" e "últimos 7/30 dias", efetivamente blindando o SQL Server do pico de 50 req/s.
 
 ### 4. Autoscaling
 - **Lançamentos**: 2 réplicas mínimo, scale-out por CPU > 70% (write-heavy).
-- **Relatório**: 3 réplicas mínimo, scale-out por requests/s ≥ 30 (HTTP scaler) — atinge **5×** (15 réplicas) em 30 s, suficiente para 50+ req/s mesmo sem cache.
+- **Relatório**: 3 réplicas mínimo, scale-out por requests/s ≥ 30 (HTTP scaler) atinge **5×** (15 réplicas) em 30 s, suficiente para 50+ req/s mesmo sem cache.
 
 ### 5. Circuit Breaker + Retry com backoff exponencial
 **(roadmap)** Polly entre Gateway → microsserviços:
@@ -65,7 +65,7 @@ Análise para **50 req/s sustentado**:
 | Cache Redis (hit) | ~80k req/s | 1 (Std C1) | 80k req/s |
 | SQL Server (S2) | ~200 select/s | 1 | 200 select/s |
 
-> Mesmo sem cache, 3 réplicas de Relatório suportam 1.500 req/s — 30× a meta. Com cache, o gargalo é a CPU do Redis (>1000× a meta).
+> Mesmo sem cache, 3 réplicas de Relatório suportam 1.500 req/s, 30× a meta. Com cache, o gargalo é a CPU do Redis (>1000× a meta).
 
 ### 8. Tolerância a falhas do Relatório
 - Se `FluxoDeCaixaConsolidado` ficar inconsistente (job de consolidação atrasou), o handler hoje retorna `[]` ou último estado conhecido. **Roadmap**: retornar **dado parcial com header `X-Stale-Until`**.
@@ -85,5 +85,5 @@ Análise para **50 req/s sustentado**:
 ## Consequências
 
 - ✅ Atende e excede os RNFs.
-- ⚠️ Cache + Outbox são **roadmap** — em produção sem eles o SQL aguenta 200 select/s do plano S2 (atende a meta com folga, mas sem margem para crescer).
-- ⚠️ Operação distribuída = mais coisa para monitorar — ver `docs/operacao/observabilidade.md`.
+- ⚠️ Cache + Outbox são **roadmap** em produção sem eles o SQL aguenta 200 select/s do plano S2 (atende a meta com folga, mas sem margem para crescer).
+- ⚠️ Operação distribuída = mais coisa para monitorar ver `docs/operacao/observabilidade.md`.
