@@ -161,7 +161,7 @@ flowchart TD
 
 A documentação detalhada está em **[`SETUP.md`](./SETUP.md)**. Em resumo:
 
-### 5.1 Via Docker (recomendado — sobe tudo: SQL Server + 3 serviços)
+### 5.1 Via Docker (recomendado sobe tudo: SQL Server + 3 serviços)
 
 ```bash
 cd FluxoDeCaixa
