@@ -79,7 +79,7 @@ curl -X POST http://localhost:5000/api/FluxoDeCaixa/InsertDebito \
 curl "http://localhost:5000/api/FluxoDeCaixaRelatorio/Relatorio?inicio=2026-01-01&fim=2026-12-31"
 ```
 
-> **Nota**: a tabela `FluxoDeCaixaConsolidado` é alimentada por um job SQLServer (SqlAgents disponível na versão Developer\Standard\Enterprise ) na versão atual via SQL manual, (no roadmap futuro via mensageria/Outbox). Para repopular agora, rode e execute o comando que vai criar um scheduled no windows para criar os registros do mês seguinte, no ultimo dia do mês atual.
+> **Nota**: a tabela `FluxoDeCaixaConsolidado` é alimentada por um job SQLServer (Job SqlAgents disponível na versão Developer\Standard\Enterprise do SQLServer) na versão utilizada Database Local(Visual Studio 2022) executar a SP via SQL cmd (no roadmap futuro via mensageria/Outbox) para popular imediatamente, execute também o comando schtasks para adicionar um scheduled no windows(como alternativa a falta do SQLAgents) que executará a stored procedure todo ultimo dia de cada mês.
 > ```sql
 > sqlcmd -S "(localdb)\MSSQLLocalDB" -d fluxocaixa -E -Q "EXEC sp_CriarConsolidadoMesSeguinte"
 > ```
