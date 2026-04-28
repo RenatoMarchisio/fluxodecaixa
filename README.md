@@ -164,8 +164,9 @@ A documentação detalhada está em **[`SETUP.md`](./SETUP.md)**. Em resumo:
 ### 5.1 Via Docker (recomendado — sobe tudo: SQL Server + 3 serviços)
 
 ```bash
-cd FluxoDeCaixa/docker
-docker compose up -d --build
+cd FluxoDeCaixa
+docker compose -f docker/docker-compose.yml build --no-cache
+docker compose -f docker/docker-compose.yml up -d
 ```
 
 | Serviço | URL |
