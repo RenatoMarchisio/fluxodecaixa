@@ -39,7 +39,7 @@ WORKDIR /app
 # Usuário non-root (já existe na imagem oficial)
 USER app
 
-ENV ASPNETCORE_ENVIRONMENT=Production \
+ENV ASPNETCORE_ENVIRONMENT=Development \
     DOTNET_RUNNING_IN_CONTAINER=true \
     DOTNET_USE_POLLING_FILE_WATCHER=false
 
