@@ -85,8 +85,9 @@ FluxoDeCaixa/
 
 Pré-requisitos: Docker Desktop / Docker Engine 24+ e Docker Compose v2.
 
-   $ cd FluxoDeCaixa/docker
-   $ docker compose up -d --build
+   $ cd FluxoDeCaixa
+   $ docker compose -f docker/docker-compose.yml build --no-cache
+   $ docker compose -f docker/docker-compose.yml up -d
 
 Endereços:
    - Gateway (Swagger agregado) ............ http://localhost:5000/swagger
