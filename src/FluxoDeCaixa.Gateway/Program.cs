@@ -3,7 +3,7 @@
  * Responsável por rotear as requisições para os microsserviços correspondentes
  * e agregar as respostas quando necessário.
  * 
- * Utiliza o Ocelot para gerenciamento de rotas e balanceamento de carga.
+ * Utiliza o YARP (Yet Another Reverse Proxy) para gerenciamento de rotas e balanceamento de carga.
  */
 
 
@@ -50,7 +50,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints => { 
+app.UseEndpoints(endpoints =>
+{
     endpoints.MapControllers();
     endpoints.MapReverseProxy();
 });

@@ -41,7 +41,7 @@ namespace FluxoDeCaixa.WebApi.Endpoints
                 {
                     Data = true,
                     succcess = true,
-                    Message = "Caixa Credito realizado com sucesso."
+                    Message = "Credito realizado com sucesso."
                 });
 
             }).WithName("InsertCredito");
@@ -76,7 +76,7 @@ namespace FluxoDeCaixa.WebApi.Endpoints
                 {
                     Data = true,
                     succcess = true,
-                    Message = "Caixa Débito realizado com sucesso."
+                    Message = "Débito realizado com sucesso."
                 });
 
             }).WithName("InsertDebito");
