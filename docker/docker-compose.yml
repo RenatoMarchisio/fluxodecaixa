@@ -60,7 +60,7 @@ services:
       redis:
         condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8000"
       # SQL Server do Visual Studio 2022 no host
       ConnectionStrings__FluxoDeCaixaConnection: >-
@@ -95,7 +95,7 @@ services:
       redis:
         condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8500"
       # SQL Server do Visual Studio 2022 no host
       ConnectionStrings__FluxoDeCaixaConnection: >-
@@ -124,7 +124,7 @@ services:
     image: fluxodecaixa/dlq:latest
     container_name: fluxocaixa-dlq
     environment:
-      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_ENVIRONMENT: "Development"
       # SQL Server do Visual Studio 2022 no host
       ConnectionStrings__FluxoDeCaixaConnection: >-
         Server=host.docker.internal,1433;
