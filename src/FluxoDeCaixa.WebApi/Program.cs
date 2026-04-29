@@ -39,15 +39,12 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Fluxo de Caixa V.1");
-        c.RoutePrefix = string.Empty;
-    });
-//}
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Fluxo de Caixa V.1");
+    c.RoutePrefix = string.Empty;
+});
 
 // Utlizado para evitar erros de bloqueios no gateway api
 app.UseCors();
