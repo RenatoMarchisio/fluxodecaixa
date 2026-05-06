@@ -225,12 +225,12 @@ docker build -f docker/Dockerfile.dlq         -t fluxodecaixa/dlq:latest        
 - **AWS**: ECS Fargate + RDS for SQL Server.
 - **Kubernetes**: 3 Deployments + 3 Services + 1 Ingress (NGINX/Traefik) + StatefulSet/Operator de SQL.
 
-Detalhes em `docs/arquitetura/c4/05-deploy.md` e `docs/operacao/custos.md`.
+Detalhes em `documentos/arquitetura/c4/05-deploy.md` e `documentos/operacao/custos.md`.
 
 ---
 
 ## 7. Próximos Passos
 
 - Rodar a suíte de testes: `dotnet test` *(estrutura preparada — implementação em roadmap)*
-- Ler **[`docs/arquitetura/c4/01-contexto.md`](docs/arquitetura/c4/01-contexto.md)** para entender a arquitetura.
-- Ler **[`docs/decisoes/`](docs/decisoes/)** para entender o "porquê" das escolhas.
+- Ler **[`documentos/arquitetura/c4/01-contexto.md`](documentos/arquitetura/c4/01-contexto.md)** para entender a arquitetura.
+- Ler **[`documentos/decisoes/`](documentos/decisoes/)** para entender o "porquê" das escolhas.

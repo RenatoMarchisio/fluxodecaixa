@@ -1,6 +1,6 @@
 # Custos de Infraestrutura | Estimativa
 
-> Estimativa **referencial** (USD/mês) para a stack-alvo descrita no `docs/arquitetura/c4/05-deploy.md`. Preços de lista da Azure em 2026 (East US 2). Variações regionais podem ser ±30%.
+> Estimativa **referencial** (USD/mês) para a stack-alvo descrita no `documentos/arquitetura/c4/05-deploy.md`. Preços de lista da Azure em 2026 (East US 2). Variações regionais podem ser ±30%.
 
 ---
 

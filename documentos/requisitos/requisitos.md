@@ -109,7 +109,7 @@ Análogo a RF-01, endpoint `POST /api/FluxoDeCaixa/InsertDebito`.
 | Alertas | Alertas em SLOs (p95, error rate) | ⚠️ Roadmap |
 
 ### RNF-08 | **Manutenibilidade**
-- Clean Architecture estrita (regras documentadas em `docs/arquitetura/uml/componentes.md`).
+- Clean Architecture estrita (regras documentadas em `documentos/arquitetura/uml/componentes.md`).
 - Validações centralizadas em `*Validator.cs`.
 - Cross-cutting em `Behaviours/`.
 - Cobertura de testes (roadmap): mínimo 70% nas camadas Application e Persistence.

@@ -1,145 +1,177 @@
 # Mapa de Domínio Funcional & Capacidades de Negócio
 
-> Visão de **Arquiteto de Soluções**: o que o negócio faz, como decompomos em capacidades, qual a relação com bounded contexts e serviços.
+> Visão de **Arquiteto de Soluções Sênior**: Este documento define como o negócio de Fluxo de Caixa é decomposto em capacidades, como essas capacidades são mapeadas para o domínio técnico através de Bounded Contexts e como a linguagem ubíqua une os stakeholders técnicos e de negócio.
 
 ---
 
-## 1. Cadeia de Valor (visão simplificada)
+## 1. Cadeia de Valor Financeira (PMEs)
+
+A solução de Fluxo de Caixa atua no coração da gestão financeira do comerciante, transformando transações operacionais em insights estratégicos.
 
 ```mermaid
 flowchart LR
-  V1[Vender] --> V2[Receber]
-  V1 --> V3[Pagar]
-  V2 --> V4[Registrar Lançamento de Crédito]
-  V3 --> V5[Registrar Lançamento de Débito]
-  V4 --> V6[Consolidar Diário]
+  V1[Venda/Operação] --> V2[Recebimento]
+  V1 --> V3[Pagamento]
+  V2 --> V4[Registro de Crédito]
+  V3 --> V5[Registro de Débito]
+  V4 --> V6[Consolidação Diária]
   V5 --> V6
-  V6 --> V7[Reportar / Conciliar]
-  V7 --> V8[Decidir<br/>compras, preços, crédito]
+  V6 --> V7[Relatórios/Insights]
+  V7 --> V8[Decisão Estratégica]
+  
   classDef core fill:#1168bd,stroke:#fff,color:#fff;
   class V4,V5,V6,V7 core
 ```
 
-A solução cobre as etapas em destaque (azul): **registrar lançamentos** (V4, V5), **consolidar** (V6) e **reportar** (V7) a cauda direta da cadeia financeira.
+A solução automatiza as etapas de **registro**, **consolidação** e **exposição de dados**, garantindo que o comerciante tenha uma visão clara de sua saúde financeira em tempo real.
 
 ---
 
-## 2. Capacidades de Negócio
+## 2. Capacidades de Negócio (Business Capabilities)
 
-| ID | Capacidade | Nível | Descrição | Cobertura nesta solução |
+As capacidades representam "o que" o negócio faz. Elas são estáveis e servem como base para a arquitetura de microsserviços.
+
+| ID | Capacidade | Nível | Descrição | Cobertura Atual |
 |---|---|---|---|---|
-| **CN-01** | Gestão de Lançamentos Financeiros | L1 | Capturar, classificar, atualizar e excluir lançamentos | ✅ Captura (RF-01, RF-02); ⚠️ Update/Delete em roadmap |
-| **CN-01.1** | Captura de Lançamentos | L2 | Persistir movimentações com integridade referencial | ✅ |
-| **CN-01.2** | Classificação | L2 | Categorias, centro de custo, projeto | ⚠️ Hoje só `descricao` livre — roadmap |
-| **CN-02** | Consolidação Financeira Diária | L1 | Agregar movimentações por janela temporal | ✅ Tabela `FluxoDeCaixaConsolidado` |
-| **CN-02.1** | Consolidação Diária | L2 | Agrupamento por `dataFC` | ✅ |
-| **CN-02.2** | Consolidação Multi-período | L2 | Semanal, mensal, anual | ⚠️ Possível derivar do diário |
-| **CN-03** | Relatórios e Insights | L1 | Apresentar visão consolidada para decisão | ✅ Endpoint REST; ⚠️ UI/dashboards em roadmap |
-| **CN-04** | Auditoria e Compliance | L1 | Registrar quem fez o quê, quando | ⚠️ Roadmap (event sourcing parcial) |
-| **CN-05** | Integração com Sistemas | L1 | Trocar dados com POS, ERP, contabilidade | ✅ API REST aberta para POS; ⚠️ ERP em roadmap |
-| **CN-06** | Segurança e Acesso | L1 | AuthN, AuthZ, criptografia | ⚠️ Placeholder JWT — roadmap |
-| **CN-07** | Observabilidade Operacional | L1 | Saber se está funcionando, com qual qualidade | ✅ Logs/Perf via Behaviours; ⚠️ Métricas/traces em roadmap |
+| **CN-01** | **Gestão de Transações** | L1 | Captura e manutenção de lançamentos financeiros. | **Parcial**: Registro (Crédito/Débito) implementado. Edição/Exclusão no roadmap. |
+| **CN-01.1** | Registro de Lançamentos | L2 | Persistência atômica de movimentações financeiras. | **Completa**: Implementada via Microsserviço de Lançamentos. |
+| **CN-01.2** | Classificação Financeira | L2 | Categorização de lançamentos para análise. | **Roadmap**: Atualmente utiliza descrição livre. |
+| **CN-02** | **Consolidação Financeira** | L1 | Processamento e agregação de dados transacionais. | **Completa**: Implementada via lógica de UPSERT no banco de dados. |
+| **CN-02.1** | Agregação Diária | L2 | Consolidação de saldos por data de competência. | **Completa**: Tabela `FluxoDeCaixaConsolidado`. |
+| **CN-02.2** | Agregação Multi-período | L2 | Visões semanais, mensais e anuais. | **Completa**: Suportada pelo endpoint de Relatório. |
+| **CN-03** | **Inteligência Financeira** | L1 | Exposição de dados consolidados para decisão. | **Completa**: Microsserviço de Relatórios com Cache Redis. |
+| **CN-04** | **Conformidade e Auditoria** | L1 | Garantia de integridade e rastro das operações. | **Roadmap**: Implementação de Event Sourcing e Logs de Auditoria. |
+| **CN-05** | **Interoperabilidade** | L1 | Integração com ecossistema (POS, ERP, Bancos). | **Completa**: APIs RESTful via Gateway YARP. |
+| **CN-06** | **Segurança Cibernética** | L1 | Proteção de dados sensíveis e controle de acesso. | **Roadmap**: Implementação de OAuth2/JWT e WAF. |
+| **CN-07** | **Resiliência Operacional** | L1 | Garantia de continuidade do negócio sob falhas. | **Completa**: Mensageria assíncrona (RabbitMQ) e DLQ. |
 
 ---
 
 ## 3. Bounded Contexts (DDD)
 
+A decomposição técnica segue os limites de domínio identificados, garantindo baixo acoplamento e alta coesão.
+
 ```mermaid
-flowchart LR
-  subgraph BC1[Bounded Context: Lançamentos]
-    L1[FluxoDeCaixa<br/>Credito/Debito]
-    L2[Validators]
-    L3[CreateCommands]
+flowchart TD
+  subgraph BC_LANC[Bounded Context: Lançamentos]
+    direction TB
+    E1[Entidade: FluxoCaixa]
+    V1[Validator: CreateCommand]
+    H1[Handler: Persistência]
   end
 
-  subgraph BC2[Bounded Context: Consolidado]
-    R1[FluxoDeCaixaRelatorio<br/>read model]
-    R2[Queries]
+  subgraph BC_REL[Bounded Context: Relatórios]
+    direction TB
+    E2[Entidade: Relatorio]
+    Q1[Query: GetConsolidado]
+    C1[Cache: Redis]
   end
 
-  subgraph BC3[Bounded Context: Identidade]
-    I1[Usuário<br/>roadmap]
-    I2[Permissões]
+  subgraph BC_AUTH[Bounded Context: Identidade]
+    direction TB
+    U1[Usuário]
+    P1[Permissões]
   end
 
-  BC1 -. evento de domínio .-> BC2
-  BC1 --> BC3
-  BC2 --> BC3
+  BC_LANC -- "Evento: LançamentoCriado" --> BC_REL
+  BC_LANC -. "Consulta Permissão" .-> BC_AUTH
+  BC_REL -. "Consulta Permissão" .-> BC_AUTH
 ```
 
-| Bounded Context | Time | Microsserviço | Modelo | Justificativa |
-|---|---|---|---|---|
-| **Lançamentos** | Squad Financeiro Operacional | `FluxoDeCaixa.WebApi` | Write model — entidades transacionais | Cada lançamento é um fato; consistência forte exigida |
-| **Consolidado** | Squad Financeiro Analítico | `FluxoDeCaixaRelatorio.WebApi` | Read model — agregados | Consultas analíticas com padrão de acesso diferente |
-| **Identidade** *(externo / roadmap)* | Plataforma | Azure AD / Keycloak (externo) | OIDC | Não reinventar a roda |
-
-> Mesmo hoje compartilhando assemblies, os contextos têm **modelos distintos** (`FluxoCaixa` vs `FluxoDeCaixaRelatorio`). A separação física vem na próxima evolução.
+| Bounded Context | Responsabilidade | Modelo | Justificativa Arquitetural |
+|---|---|---|---|
+| **Lançamentos** | Registro transacional e integridade de dados. | **Write Model** | Foco em consistência forte e performance de escrita. |
+| **Relatórios** | Agregação e exposição de dados analíticos. | **Read Model** | Foco em performance de leitura e escalabilidade horizontal. |
+| **Identidade** | Autenticação e Autorização (IAM). | **Cross-Cutting** | Centralização de segurança seguindo normativas BACEN/LGPD. |
 
 ---
 
-## 4. Mapa de Domínio (Linguagem Ubíqua)
+## 4. Linguagem Ubíqua (Ubiquitous Language)
 
-| Termo de negócio | Termo técnico | Onde no código |
+Dicionário compartilhado entre especialistas de negócio e desenvolvedores para evitar ambiguidades.
+
+| Termo de Negócio | Termo Técnico | Definição |
 |---|---|---|
-| Lançamento | `FluxoDeCaixaBase` | `Domain/Entities/FluxoCaixa.cs` |
-| Crédito | `FluxoDeCaixaCredito` | idem |
-| Débito | `FluxoDeCaixaDebito` | idem |
-| Data do lançamento | `dataFC` (DateOnly) | idem |
-| Descrição | `descricao` (string) | idem |
-| Saldo do dia | `FluxoDeCaixaRelatorio { dataFC, credito, debito }` | `Domain/Entities/FluxoDeCaixaRelatorio.cs` |
-| Consolidado | `FluxoDeCaixaConsolidado` (tabela) | `Sql/Create CML.sql` |
-| Identificador único do lançamento | `Guid` (UUIDv7) | `CreateFluxoDeCaixaBaseCommand` |
+| **Lançamento** | `FluxoDeCaixaBase` | Registro individual de uma movimentação financeira. |
+| **Crédito** | `FluxoDeCaixaCredito` | Lançamento de entrada de valores no caixa. |
+| **Débito** | `FluxoDeCaixaDebito` | Lançamento de saída de valores do caixa. |
+| **Saldo Consolidado** | `FluxoDeCaixaConsolidado` | Resultado da soma de créditos e débitos em um período. |
+| **Data de Competência** | `dataFC` | A data em que o lançamento efetivamente impacta o caixa. |
+| **Identificador Único** | `ID (UUIDv7)` | Chave primária ordenável no tempo para rastreabilidade. |
+| **Fila de Mensagens** | `RabbitMQ` | Canal de comunicação assíncrona para garantir resiliência. |
 
 ---
 
-## 5. Eventos de Domínio
+## 5. Eventos de Domínio e Fluxo de Dados
 
-Já modelados como **classes** (em `FluxoDeCaixa.Domain.Events`) ainda não publicados em broker, mas pronto para o Outbox Pattern (roadmap):
+A comunicação entre contextos é orientada a eventos, permitindo a evolução independente dos serviços.
 
-```csharp
-public abstract class FluxoDeCaixaCreatedBaseEvent : BaseEvent
-{
-    public Guid ID { get; set; }
-    public DateOnly dataFC { get; set; }
-    public string descricao { get; set; }
-}
+### 5.1. Eventos Implementados/Planejados
+*   `FluxoDeCaixaCreatedEvent`: Disparado quando um novo lançamento é registrado.
+*   `ConsolidadoUpdatedEvent` (Roadmap): Disparado quando o saldo diário é recalculado.
 
-public abstract class FluxoDeCaixaCreatedCreditoEvent : BaseEvent {
-    public decimal credito { get; set; }
-}
+### 5.2. Fluxo de Dados Macro (Sequence Diagram)
 
-public abstract class FluxoDeCaixaCreatedDebitoEvent : BaseEvent {
-    public decimal debito { get; set; }
-}
-```
-
-> `BaseEvent : INotification` (MediatR) → no fluxo síncrono atual, podem ser publicados in-process via `_mediator.Publish(...)`. No fluxo assíncrono futuro, o handler da entrega serializa em mensagem e envia ao broker.
-
----
-
-## 6. Fluxo de dados macro
+O fluxo abaixo detalha a interação entre os componentes desde o registro da transação até a sua disponibilidade no relatório consolidado.
 
 ```mermaid
 sequenceDiagram
   participant POS as POS / Comerciante
+  participant GW as API Gateway (YARP)
   participant LANC as Bounded Context Lançamentos
   participant SQL as Tabela FluxoDeCaixa
-  participant JOB as Job Consolidador (roadmap)
-  participant CONS as Tabela FluxoDeCaixaConsolidado
+  participant BUS as RabbitMQ (Message Bus)
+  participant CONS as Worker / Consolidado (UPSERT)
   participant REL as Bounded Context Relatório
+  participant REDIS as Redis Cache
 
-  POS->>LANC: registrar(crédito ou débito)
-  LANC->>SQL: INSERT
-  Note over SQL,JOB: trigger ou job batch
-  JOB-->>CONS: agregar por dataFC
-  REL->>CONS: SELECT por intervalo
-  CONS-->>REL: dtos
+  POS->>GW: POST /InsertCredito (JSON)
+  GW->>LANC: Roteia requisição
+  LANC->>SQL: Persiste Lançamento (UUIDv7)
+  LANC->>BUS: Publica Evento "LançamentoCriado"
+  LANC-->>POS: HTTP 201 (Created)
+  
+  Note over BUS,CONS: Processamento Assíncrono
+  BUS->>CONS: Consome mensagem
+  CONS->>SQL: Executa UPSERT em FluxoDeCaixaConsolidado
+  
+  Note over POS,REL: Consulta de Relatório
+  POS->>GW: GET /GetRelatorio?inicio=...&fim=...
+  GW->>REL: Roteia requisição
+  REL->>REDIS: Verifica Cache
+  ALT Cache Hit
+    REDIS-->>REL: Retorna dados cacheados
+  ELSE Cache Miss
+    REL->>SQL: SELECT em FluxoDeCaixaConsolidado
+    SQL-->>REL: Dados agregados
+    REL->>REDIS: Alimenta Cache (TTL inteligente)
+  END
+  REL-->>POS: HTTP 200 (JSON Report)
 ```
 
-Hoje a "agregação" é feita por SQL manual (script em `Sql/Create CML.sql`):
+### 5.3. Mecanismo de Agregação de Dados
+
+Atualmente, a agregação é garantida por uma lógica de **UPSERT atômico** no banco de dados, assegurando que o `read model` esteja sempre em sincronia com o `write model` após o processamento da mensagem.
+
+**Lógica SQL de Consolidação:**
 ```sql
-INSERT INTO FluxoDeCaixaConsolidado(dataFC, credito, debito)
-SELECT dataFC, SUM(credito), SUM(debito) FROM FluxoDeCaixa GROUP BY dataFC
+-- Exemplo conceitual da lógica de UPSERT utilizada no repositório
+IF EXISTS (SELECT 1 FROM FluxoDeCaixaConsolidado WHERE dataFC = @data)
+    UPDATE FluxoDeCaixaConsolidado 
+    SET credito = credito + @valor_c, debito = debito + @valor_d 
+    WHERE dataFC = @data
+ELSE
+    INSERT INTO FluxoDeCaixaConsolidado (dataFC, credito, debito) 
+    VALUES (@data, @valor_c, @valor_d)
 ```
 
-**Roadmap**: substituir por **job de consolidação** (background service) ou **trigger SQL** ou (preferível) **handler de evento** publicado pelo Lançamentos (Outbox Pattern).
+**Evolução (Roadmap):** Substituir a agregação direta por um **Job de Consolidação** agendado ou uma arquitetura de **Event Sourcing** completa para permitir a reconstrução do saldo a partir de qualquer ponto no tempo.
+
+---
+
+## 6. Evolução do Domínio (Roadmap)
+
+1.  **Multi-Tenancy**: Suporte a múltiplos comerciantes isolados no mesmo domínio.
+2.  **Categorização Inteligente**: Uso de IA para classificar descrições de lançamentos automaticamente.
+3.  **Conciliação Bancária**: Integração automática com extratos via APIs de Open Banking.
+4.  **Predição de Fluxo**: Algoritmos de ML para prever o saldo futuro com base no histórico.

@@ -86,4 +86,4 @@ Análise para **50 req/s sustentado**:
 
 - ✅ Atende e excede os RNFs.
 - ⚠️ Cache + Outbox são **roadmap** em produção sem eles o SQL aguenta 200 select/s do plano S2 (atende a meta com folga, mas sem margem para crescer).
-- ⚠️ Operação distribuída = mais coisa para monitorar ver `docs/operacao/observabilidade.md`.
+- ⚠️ Operação distribuída = mais coisa para monitorar ver `documentos/operacao/observabilidade.md`.

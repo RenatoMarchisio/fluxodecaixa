@@ -60,7 +60,7 @@ FluxoDeCaixa/
   FluxoDeCaixa.sln              Solução .NET 
   docker/Sql/init.sql           DDL das tabelas
   docker/                       Imagens Docker + docker-compose
-  docs/                         Documentação completa
+  documentos/                         Documentação completa
     arquitetura/c4/             Modelo C4 (Contexto, Containers, Componentes, Código, Deploy)
     arquitetura/uml/            Diagramas UML (Classe, Sequência, Componentes, Atividade, Casos de Uso)
     requisitos/                 Funcionais e não-funcionais
@@ -85,8 +85,9 @@ FluxoDeCaixa/
 
 Pré-requisitos: Docker Desktop / Docker Engine 24+ e Docker Compose v2.
 
-   $ cd FluxoDeCaixa/docker
-   $ docker compose up -d --build
+   $ cd FluxoDeCaixa
+   $ docker compose -f docker/docker-compose.yml build --no-cache
+   $ docker compose -f docker/docker-compose.yml up -d
 
 Endereços:
    - Gateway (Swagger agregado) ............ http://localhost:5000/swagger
@@ -129,19 +130,19 @@ Resposta padrão (envelope BaseResponse<T>):
 --------------------------------------------------------------------------------
 
 Modelo C4 (Simon Brown):
-  docs/arquitetura/c4/01-contexto.md       Nível 1 Contexto do sistema
-  docs/arquitetura/c4/02-containers.md     Nível 2 Containers
-  docs/arquitetura/c4/03-componentes.md    Nível 3 Componentes internos
-  docs/arquitetura/c4/04-codigo.md         Nível 4 Detalhamento de classes
-  docs/arquitetura/c4/05-deploy.md         Diagrama de deployment
+  documentos/arquitetura/c4/01-contexto.md       Nível 1 Contexto do sistema
+  documentos/arquitetura/c4/02-containers.md     Nível 2 Containers
+  documentos/arquitetura/c4/03-componentes.md    Nível 3 Componentes internos
+  documentos/arquitetura/c4/04-codigo.md         Nível 4 Detalhamento de classes
+  documentos/arquitetura/c4/05-deploy.md         Diagrama de deployment
 
 UML:
-  docs/arquitetura/uml/classes.md
-  docs/arquitetura/uml/sequencia-lancamento.md
-  docs/arquitetura/uml/sequencia-relatorio.md
-  docs/arquitetura/uml/componentes.md
-  docs/arquitetura/uml/atividade.md
-  docs/arquitetura/uml/casos-de-uso.md
+  documentos/arquitetura/uml/classes.md
+  documentos/arquitetura/uml/sequencia-lancamento.md
+  documentos/arquitetura/uml/sequencia-relatorio.md
+  documentos/arquitetura/uml/componentes.md
+  documentos/arquitetura/uml/atividade.md
+  documentos/arquitetura/uml/casos-de-uso.md
 
 Decisões Arquiteturais (ADRs):
   ADR-001  Microsserviços

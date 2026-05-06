@@ -659,12 +659,12 @@ app.MapHealthChecks("/healthz/ready", new HealthCheckOptions { Predicate = check
 | FluentValidation | https://docs.fluentvalidation.net/ |
 | Dapper | https://github.com/DapperLib/Dapper |
 | SQL MERGE (UPSERT) | https://learn.microsoft.com/sql/t-sql/statements/merge-transact-sql |
-| Diagramas C4 (nível 1) | `docs/arquitetura/c4/01-contexto.md` |
-| Diagramas C4 (nível 2) | `docs/arquitetura/c4/02-containers.md` |
-| Diagramas C4 (nível 3) | `docs/arquitetura/c4/03-componentes.md` |
-| Diagramas C4 (nível 4) | `docs/arquitetura/c4/04-codigo.md` |
-| Diagrama de Deployment | `docs/arquitetura/c4/05-deploy.md` |
-| Sequência — Lançamento | `docs/arquitetura/uml/sequencia-lancamento.md` |
-| Sequência — Relatório | `docs/arquitetura/uml/sequencia-relatorio.md` |
-| Script SQL | `Sql/Create CML.sql` |
-| ADRs | `docs/decisoes/ADR-00*.md` |
+| Diagramas C4 (nível 1) | `documentos/arquitetura/c4/01-contexto.md` |
+| Diagramas C4 (nível 2) | `documentos/arquitetura/c4/02-containers.md` |
+| Diagramas C4 (nível 3) | `documentos/arquitetura/c4/03-componentes.md` |
+| Diagramas C4 (nível 4) | `documentos/arquitetura/c4/04-codigo.md` |
+| Diagrama de Deployment | `documentos/arquitetura/c4/05-deploy.md` |
+| Sequência — Lançamento | `documentos/arquitetura/uml/sequencia-lancamento.md` |
+| Sequência — Relatório | `documentos/arquitetura/uml/sequencia-relatorio.md` |
+| Script SQL | `docker/sql/init.sql` |
+| ADRs | `documentos/decisoes/ADR-00*.md` |
