@@ -21,7 +21,7 @@
   - [4. Estrutura da Solução](#4-estrutura-da-solução)
     - [Mapa de dependências entre projetos](#mapa-de-dependências-entre-projetos)
   - [5. Como Executar](#5-como-executar)
-    - [5.1 Via Docker (recomendado sobe tudo: SQL Server + 3 serviços)](#51-via-docker-recomendado--sobe-tudo-sql-server--3-serviços)
+    - [5.1 Via Docker (recomendado sobe tudo: SQL Server + 3 serviços)](#51-via-docker-recomendado-sobe-tudo-sql-server--3-serviços)
     - [5.2 Local (Visual Studio / `dotnet`)](#52-local-visual-studio--dotnet)
   - [6. Endpoints (Contrato da API)](#6-endpoints-contrato-da-api)
     - [POST `/api/FluxoDeCaixa/InsertCredito`](#post-apifluxodecaixainsertcredito)
@@ -84,7 +84,7 @@ flowchart LR
 - **Cross-cutting** via Pipeline Behaviours (Validação, Logging, Performance).
 - **Resiliência**: serviço de Lançamentos é **autônomo** falhas no Relatório nunca impactam a captura.
 
-> Ver detalhes em `docs/arquitetura/c4/` (modelo C4 completo, 4 níveis) e `docs/arquitetura/uml/` (UML).
+> Ver detalhes em `documentos/arquitetura/c4/` (modelo C4 completo, 4 níveis) e `documentos/arquitetura/uml/` (UML).
 
 ---
 
@@ -100,7 +100,7 @@ FluxoDeCaixa/
 │  ├─ docker-compose.yml                 ← Orquestração local completa
 │  ├─ .dockerignore
 │  └─ sql/init.sql                       ← Bootstrap do banco
-├─ docs/
+├─ documentos/
 │  ├─ arquitetura/c4/                    ← Modelo C4 (Contexto, Container, Componente, Código)
 │  ├─ arquitetura/uml/                   ← Diagramas UML (Classe, Sequência, Componentes, Deploy)
 │  ├─ requisitos/                        ← Funcionais e não-funcionais
@@ -252,30 +252,30 @@ Devolve o **consolidado diário** (saldo de crédito × débito por data) no per
 
 | Documento | Descrição |
 |---|---|
-| **[`docs/arquitetura/c4/01-contexto.md`](docs/arquitetura/c4/01-contexto.md)** | C4 Nível 1 Diagrama de Contexto |
-| **[`docs/arquitetura/c4/02-containers.md`](docs/arquitetura/c4/02-containers.md)** | C4 Nível 2 Containers (microsserviços, gateway, BD) |
-| **[`docs/arquitetura/c4/03-componentes.md`](docs/arquitetura/c4/03-componentes.md)** | C4 Nível 3 Componentes internos de cada serviço |
-| **[`docs/arquitetura/c4/04-codigo.md`](docs/arquitetura/c4/04-codigo.md)** | C4 Nível 4 Detalhamento de classes-chave |
-| **[`docs/arquitetura/c4/05-deploy.md`](docs/arquitetura/c4/05-deploy.md)** | Diagrama de Deploy (Docker, Cloud target) |
-| **[`docs/arquitetura/uml/classes.md`](docs/arquitetura/uml/classes.md)** | UML Diagrama de Classes |
-| **[`docs/arquitetura/uml/sequencia-lancamento.md`](docs/arquitetura/uml/sequencia-lancamento.md)** | UML Sequência: Lançar Crédito/Débito |
-| **[`docs/arquitetura/uml/sequencia-relatorio.md`](docs/arquitetura/uml/sequencia-relatorio.md)** | UML Sequência: Consultar Relatório Consolidado |
-| **[`docs/arquitetura/uml/componentes.md`](docs/arquitetura/uml/componentes.md)** | UML Diagrama de Componentes |
-| **[`docs/arquitetura/uml/atividade.md`](docs/arquitetura/uml/atividade.md)** | UML Atividade do pipeline de Validação/CQRS |
-| **[`docs/arquitetura/uml/casos-de-uso.md`](docs/arquitetura/uml/casos-de-uso.md)** | UML Casos de Uso |
-| **[`docs/dominio/dominio-e-capacidades.md`](docs/dominio/dominio-e-capacidades.md)** | Mapa de Domínio Funcional & Capacidades de Negócio |
-| **[`docs/requisitos/requisitos.md`](docs/requisitos/requisitos.md)** | Requisitos funcionais e não funcionais (refinados) |
-| **[`docs/decisoes/ADR-001-microsservicos.md`](docs/decisoes/ADR-001-microsservicos.md)** | ADR Por que Microsserviços |
-| **[`docs/decisoes/ADR-002-cqrs-mediatr.md`](docs/decisoes/ADR-002-cqrs-mediatr.md)** | ADR Por que CQRS com MediatR |
-| **[`docs/decisoes/ADR-003-dapper.md`](docs/decisoes/ADR-003-dapper.md)** | ADR Por que Dapper (vs EF Core) |
-| **[`docs/decisoes/ADR-004-yarp-gateway.md`](docs/decisoes/ADR-004-yarp-gateway.md)** | ADR Por que YARP como Gateway |
-| **[`docs/decisoes/ADR-005-uuidv7.md`](docs/decisoes/ADR-005-uuidv7.md)** | ADR Por que UUIDv7 como identificador |
-| **[`docs/decisoes/ADR-006-resiliencia.md`](docs/decisoes/ADR-006-resiliencia.md)** | ADR Estratégia de Resiliência (50 req/s, 95% uptime) |
-| **[`docs/operacao/seguranca.md`](docs/operacao/seguranca.md)** | Segurança (AuthN/AuthZ, criptografia, hardening) |
-| **[`docs/operacao/observabilidade.md`](docs/operacao/observabilidade.md)** | Observabilidade (logs, métricas, traces) |
-| **[`docs/operacao/custos.md`](docs/operacao/custos.md)** | Estimativa de custos de infraestrutura |
-| **[`docs/operacao/transicao.md`](docs/operacao/transicao.md)** | Arquitetura de Transição (legado → alvo) |
-| **[`docs/operacao/futuro.md`](docs/operacao/futuro.md)** | Evoluções e roadmap futuro |
+| **[`documentos/arquitetura/c4/01-contexto.md`](documentos/arquitetura/c4/01-contexto.md)** | C4 Nível 1 Diagrama de Contexto |
+| **[`documentos/arquitetura/c4/02-containers.md`](documentos/arquitetura/c4/02-containers.md)** | C4 Nível 2 Containers (microsserviços, gateway, BD) |
+| **[`documentos/arquitetura/c4/03-componentes.md`](documentos/arquitetura/c4/03-componentes.md)** | C4 Nível 3 Componentes internos de cada serviço |
+| **[`documentos/arquitetura/c4/04-codigo.md`](documentos/arquitetura/c4/04-codigo.md)** | C4 Nível 4 Detalhamento de classes-chave |
+| **[`documentos/arquitetura/c4/05-deploy.md`](documentos/arquitetura/c4/05-deploy.md)** | Diagrama de Deploy (Docker, Cloud target) |
+| **[`documentos/arquitetura/uml/classes.md`](documentos/arquitetura/uml/classes.md)** | UML Diagrama de Classes |
+| **[`documentos/arquitetura/uml/sequencia-lancamento.md`](documentos/arquitetura/uml/sequencia-lancamento.md)** | UML Sequência: Lançar Crédito/Débito |
+| **[`documentos/arquitetura/uml/sequencia-relatorio.md`](documentos/arquitetura/uml/sequencia-relatorio.md)** | UML Sequência: Consultar Relatório Consolidado |
+| **[`documentos/arquitetura/uml/componentes.md`](documentos/arquitetura/uml/componentes.md)** | UML Diagrama de Componentes |
+| **[`documentos/arquitetura/uml/atividade.md`](documentos/arquitetura/uml/atividade.md)** | UML Atividade do pipeline de Validação/CQRS |
+| **[`documentos/arquitetura/uml/casos-de-uso.md`](documentos/arquitetura/uml/casos-de-uso.md)** | UML Casos de Uso |
+| **[`documentos/dominio/dominio-e-capacidades.md`](documentos/dominio/dominio-e-capacidades.md)** | Mapa de Domínio Funcional & Capacidades de Negócio |
+| **[`documentos/requisitos/requisitos.md`](documentos/requisitos/requisitos.md)** | Requisitos funcionais e não funcionais (refinados) |
+| **[`documentos/decisoes/ADR-001-microsservicos.md`](documentos/decisoes/ADR-001-microsservicos.md)** | ADR Por que Microsserviços |
+| **[`documentos/decisoes/ADR-002-cqrs-mediatr.md`](documentos/decisoes/ADR-002-cqrs-mediatr.md)** | ADR Por que CQRS com MediatR |
+| **[`documentos/decisoes/ADR-003-dapper.md`](documentos/decisoes/ADR-003-dapper.md)** | ADR Por que Dapper (vs EF Core) |
+| **[`documentos/decisoes/ADR-004-yarp-gateway.md`](documentos/decisoes/ADR-004-yarp-gateway.md)** | ADR Por que YARP como Gateway |
+| **[`documentos/decisoes/ADR-005-uuidv7.md`](documentos/decisoes/ADR-005-uuidv7.md)** | ADR Por que UUIDv7 como identificador |
+| **[`documentos/decisoes/ADR-006-resiliencia.md`](documentos/decisoes/ADR-006-resiliencia.md)** | ADR Estratégia de Resiliência (50 req/s, 95% uptime) |
+| **[`documentos/operacao/seguranca.md`](documentos/operacao/seguranca.md)** | Segurança (AuthN/AuthZ, criptografia, hardening) |
+| **[`documentos/operacao/observabilidade.md`](documentos/operacao/observabilidade.md)** | Observabilidade (logs, métricas, traces) |
+| **[`documentos/operacao/custos.md`](documentos/operacao/custos.md)** | Estimativa de custos de infraestrutura |
+| **[`documentos/operacao/transicao.md`](documentos/operacao/transicao.md)** | Arquitetura de Transição (legado → alvo) |
+| **[`documentos/operacao/futuro.md`](documentos/operacao/futuro.md)** | Evoluções e roadmap futuro |
 
 ---
 
@@ -295,7 +295,7 @@ Devolve o **consolidado diário** (saldo de crédito × débito por data) no per
 | **Strangler Fig** *(roadmap)* | Transição | Migração gradual de eventual legado. |
 | **Outbox Pattern** *(roadmap)* | Lançamentos → Relatório | Garantir entrega de eventos sem 2PC. |
 
-> Detalhes e justificativas em `docs/decisoes/ADR-*.md`.
+> Detalhes e justificativas em `documentos/decisoes/ADR-*.md`.
 
 ---
 
@@ -310,7 +310,7 @@ Devolve o **consolidado diário** (saldo de crédito × débito por data) no per
 | **RNF-05** Segurança | Validação de entrada via FluentValidation + middleware de erros; CORS configurado; HTTPS no Gateway; placeholder JWT em `appsettings` | ⚠️ JWT pronto para integrar |
 | **RNF-06** Escalabilidade horizontal | Serviços stateless; podem rodar N réplicas atrás do Gateway | ✅ Atendido |
 
-> Detalhes completos em `docs/requisitos/requisitos.md` e `docs/decisoes/ADR-006-resiliencia.md`.
+> Detalhes completos em `documentos/requisitos/requisitos.md` e `documentos/decisoes/ADR-006-resiliencia.md`.
 
 ---
 
@@ -325,7 +325,7 @@ Devolve o **consolidado diário** (saldo de crédito × débito por data) no per
 - **Testes** (xUnit + FluentAssertions + Testcontainers) com cobertura de Handlers, Validators e Repositórios.
 - **CI/CD**: GitHub Actions com `dotnet test` + `docker buildx` + push para registry.
 
-> Roadmap completo: `docs/operacao/futuro.md`.
+> Roadmap completo: `documentos/operacao/futuro.md`.
 
 ---
 
