@@ -252,30 +252,30 @@ Devolve o **consolidado diário** (saldo de crédito × débito por data) no per
 
 | Documento | Descrição |
 |---|---|
-| **[`docs/arquitetura/c4/01-contexto.md`](docs/arquitetura/c4/01-contexto.md)** | C4 Nível 1 Diagrama de Contexto |
-| **[`docs/arquitetura/c4/02-containers.md`](docs/arquitetura/c4/02-containers.md)** | C4 Nível 2 Containers (microsserviços, gateway, BD) |
-| **[`docs/arquitetura/c4/03-componentes.md`](docs/arquitetura/c4/03-componentes.md)** | C4 Nível 3 Componentes internos de cada serviço |
-| **[`docs/arquitetura/c4/04-codigo.md`](docs/arquitetura/c4/04-codigo.md)** | C4 Nível 4 Detalhamento de classes-chave |
-| **[`docs/arquitetura/c4/05-deploy.md`](docs/arquitetura/c4/05-deploy.md)** | Diagrama de Deploy (Docker, Cloud target) |
-| **[`docs/arquitetura/uml/classes.md`](docs/arquitetura/uml/classes.md)** | UML Diagrama de Classes |
-| **[`docs/arquitetura/uml/sequencia-lancamento.md`](docs/arquitetura/uml/sequencia-lancamento.md)** | UML Sequência: Lançar Crédito/Débito |
-| **[`docs/arquitetura/uml/sequencia-relatorio.md`](docs/arquitetura/uml/sequencia-relatorio.md)** | UML Sequência: Consultar Relatório Consolidado |
-| **[`docs/arquitetura/uml/componentes.md`](docs/arquitetura/uml/componentes.md)** | UML Diagrama de Componentes |
-| **[`docs/arquitetura/uml/atividade.md`](docs/arquitetura/uml/atividade.md)** | UML Atividade do pipeline de Validação/CQRS |
-| **[`docs/arquitetura/uml/casos-de-uso.md`](docs/arquitetura/uml/casos-de-uso.md)** | UML Casos de Uso |
-| **[`docs/dominio/dominio-e-capacidades.md`](docs/dominio/dominio-e-capacidades.md)** | Mapa de Domínio Funcional & Capacidades de Negócio |
-| **[`docs/requisitos/requisitos.md`](docs/requisitos/requisitos.md)** | Requisitos funcionais e não funcionais (refinados) |
-| **[`docs/decisoes/ADR-001-microsservicos.md`](docs/decisoes/ADR-001-microsservicos.md)** | ADR Por que Microsserviços |
-| **[`docs/decisoes/ADR-002-cqrs-mediatr.md`](docs/decisoes/ADR-002-cqrs-mediatr.md)** | ADR Por que CQRS com MediatR |
-| **[`docs/decisoes/ADR-003-dapper.md`](docs/decisoes/ADR-003-dapper.md)** | ADR Por que Dapper (vs EF Core) |
-| **[`docs/decisoes/ADR-004-yarp-gateway.md`](docs/decisoes/ADR-004-yarp-gateway.md)** | ADR Por que YARP como Gateway |
-| **[`docs/decisoes/ADR-005-uuidv7.md`](docs/decisoes/ADR-005-uuidv7.md)** | ADR Por que UUIDv7 como identificador |
-| **[`docs/decisoes/ADR-006-resiliencia.md`](docs/decisoes/ADR-006-resiliencia.md)** | ADR Estratégia de Resiliência (50 req/s, 95% uptime) |
-| **[`docs/operacao/seguranca.md`](docs/operacao/seguranca.md)** | Segurança (AuthN/AuthZ, criptografia, hardening) |
-| **[`docs/operacao/observabilidade.md`](docs/operacao/observabilidade.md)** | Observabilidade (logs, métricas, traces) |
-| **[`docs/operacao/custos.md`](docs/operacao/custos.md)** | Estimativa de custos de infraestrutura |
-| **[`docs/operacao/transicao.md`](docs/operacao/transicao.md)** | Arquitetura de Transição (legado → alvo) |
-| **[`docs/operacao/futuro.md`](docs/operacao/futuro.md)** | Evoluções e roadmap futuro |
+| **[`documentos/arquitetura/c4/01-contexto.md`](docs/arquitetura/c4/01-contexto.md)** | C4 Nível 1 Diagrama de Contexto |
+| **[`documentos/arquitetura/c4/02-containers.md`](docs/arquitetura/c4/02-containers.md)** | C4 Nível 2 Containers (microsserviços, gateway, BD) |
+| **[`documentos/arquitetura/c4/03-componentes.md`](docs/arquitetura/c4/03-componentes.md)** | C4 Nível 3 Componentes internos de cada serviço |
+| **[`documentos/arquitetura/c4/04-codigo.md`](docs/arquitetura/c4/04-codigo.md)** | C4 Nível 4 Detalhamento de classes-chave |
+| **[`documentos/arquitetura/c4/05-deploy.md`](docs/arquitetura/c4/05-deploy.md)** | Diagrama de Deploy (Docker, Cloud target) |
+| **[`documentos/arquitetura/uml/classes.md`](docs/arquitetura/uml/classes.md)** | UML Diagrama de Classes |
+| **[`documentos/arquitetura/uml/sequencia-lancamento.md`](docs/arquitetura/uml/sequencia-lancamento.md)** | UML Sequência: Lançar Crédito/Débito |
+| **[`documentos/arquitetura/uml/sequencia-relatorio.md`](docs/arquitetura/uml/sequencia-relatorio.md)** | UML Sequência: Consultar Relatório Consolidado |
+| **[`documentos/arquitetura/uml/componentes.md`](docs/arquitetura/uml/componentes.md)** | UML Diagrama de Componentes |
+| **[`documentos/arquitetura/uml/atividade.md`](docs/arquitetura/uml/atividade.md)** | UML Atividade do pipeline de Validação/CQRS |
+| **[`documentos/arquitetura/uml/casos-de-uso.md`](docs/arquitetura/uml/casos-de-uso.md)** | UML Casos de Uso |
+| **[`documentos/dominio/dominio-e-capacidades.md`](docs/dominio/dominio-e-capacidades.md)** | Mapa de Domínio Funcional & Capacidades de Negócio |
+| **[`documentos/requisitos/requisitos.md`](docs/requisitos/requisitos.md)** | Requisitos funcionais e não funcionais (refinados) |
+| **[`documentos/decisoes/ADR-001-microsservicos.md`](docs/decisoes/ADR-001-microsservicos.md)** | ADR Por que Microsserviços |
+| **[`documentos/decisoes/ADR-002-cqrs-mediatr.md`](docs/decisoes/ADR-002-cqrs-mediatr.md)** | ADR Por que CQRS com MediatR |
+| **[`documentos/decisoes/ADR-003-dapper.md`](docs/decisoes/ADR-003-dapper.md)** | ADR Por que Dapper (vs EF Core) |
+| **[`documentos/decisoes/ADR-004-yarp-gateway.md`](docs/decisoes/ADR-004-yarp-gateway.md)** | ADR Por que YARP como Gateway |
+| **[`documentos/decisoes/ADR-005-uuidv7.md`](docs/decisoes/ADR-005-uuidv7.md)** | ADR Por que UUIDv7 como identificador |
+| **[`documentos/decisoes/ADR-006-resiliencia.md`](docs/decisoes/ADR-006-resiliencia.md)** | ADR Estratégia de Resiliência (50 req/s, 95% uptime) |
+| **[`documentos/operacao/seguranca.md`](docs/operacao/seguranca.md)** | Segurança (AuthN/AuthZ, criptografia, hardening) |
+| **[`documentos/operacao/observabilidade.md`](docs/operacao/observabilidade.md)** | Observabilidade (logs, métricas, traces) |
+| **[`documentos/operacao/custos.md`](docs/operacao/custos.md)** | Estimativa de custos de infraestrutura |
+| **[`documentos/operacao/transicao.md`](docs/operacao/transicao.md)** | Arquitetura de Transição (legado → alvo) |
+| **[`documentos/operacao/futuro.md`](docs/operacao/futuro.md)** | Evoluções e roadmap futuro |
 
 ---
 
