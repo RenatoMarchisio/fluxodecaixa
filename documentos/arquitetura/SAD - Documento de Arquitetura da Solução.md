@@ -29,7 +29,7 @@
     
 ## 1. Introdução
 
-Este documento detalha a arquitetura da solução para o desafio de um comerciante que precisa registrar seus lançamentos de créditos e débitos e ter um relatório consolidade por dia, nomearemos o sistema com "Fluxo de Caixa", vamos decompor este documento SAD em domínios, justificativas arquiteturais, estratégias de escalabilidade e resiliência, e considerações para evolução futura e demais. A análise foi baseada no projeto desafio Banco Carrefour fornecido.
+Este documento detalha a arquitetura da solução para o desafio de um comerciante que precisa registrar seus lançamentos de créditos e débitos e ter um relatório consolidade por dia, nomearemos o sistema com "Fluxo de Caixa", vamos decompor este documento SAD em domínios, justificativas arquiteturais, estratégias de escalabilidade e resiliência, e considerações para evolução futura e demais. A análise foi baseada no projeto desafio Banco Fornecido.
 
 ## 2. Sumário Executivo
 
